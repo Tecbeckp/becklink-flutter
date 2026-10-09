@@ -225,6 +225,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # A file that the tooling rewrites would make the dry run warn about a dirty git state.
+      - name: Show modified files
+        run: git status --short
+
       # Warnings fail it too, as they would block the publish workflow.
       - name: Publish dry run
         run: flutter pub publish --dry-run

@@ -58,7 +58,7 @@ case "$platform" in
     ;;
 esac
 
-flutter pub add "becklink_flutter:{\"path\":\"$sdk_dir\"}"
+flutter pub add becklink_flutter --path "$sdk_dir"
 
 # On macOS, resolving the first iOS plugin writes ios/Podfile, whose platform line is commented
 # out (CocoaPods would then take the Runner target's deployment target). Set it as the README
