@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The INTERNET permission is required for development. Specifically,
+         the Flutter tool needs it to communicate with the running application
+         to allow setting breakpoints, to provide hot reload, etc.
+    -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Debug builds only: plain HTTP to a local Beck Link server
+         (http://192.168.x.x:4100, or http://localhost:4100 through adb reverse).
+         The main and release manifests keep Android's cleartext default (off),
+         and the SDK accepts HTTP to a private network in debug builds only. -->
+    <application android:usesCleartextTraffic="true" />
+</manifest>

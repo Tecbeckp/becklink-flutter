@@ -1,0 +1,30 @@
+name: becklink_flutter_example
+description: Demonstrates how to use the becklink_flutter plugin.
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  becklink_flutter:
+    # The example always builds against the plugin source next to it.
+    path: ../
+  flutter:
+    sdk: flutter
+  # 16.1 is the newest release for Flutter 3.27 (Dart 3.6), the SDK's oldest supported
+  # version; this app resolves 17.x. Not 18: it moved to the separate material_ui package
+  # and no longer recognises a MaterialApp from package:flutter/material.dart.
+  go_router: ">=16.1.0 <18.0.0"
+  share_plus: ^13.3.1
+  shared_preferences: ^2.5.6
+  url_launcher: ^6.3.3
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

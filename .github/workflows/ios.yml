@@ -1,0 +1,128 @@
+name: Flutter SDK iOS
+
+# The iOS builds of the becklink_flutter plugin (repository root), on macOS runners. GitHub counts
+# every macOS minute of a private repository 10 times against the free Actions minutes, so these
+# jobs never run on pull requests or pushes (owner: no paid CI). Two callers only:
+# - ci.yml, when started by hand (Actions → Flutter SDK → Run workflow);
+# - publish.yml, on every `v*` release tag, before it publishes, so no
+#   release ships without a passing iOS build.
+# Callers set the concurrency; the checkout is the caller's commit (the tag, for a release).
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_SUPPRESS_ANALYTICS: 'true'
+
+jobs:
+  ios:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Flutter 3.27 to 3.43 apps get the plugin through CocoaPods. Xcode 16.0 is the oldest
+          # Xcode on GitHub's macOS images and the documented minimum.
+          - name: 'iOS: build (Flutter 3.27.x, CocoaPods)'
+            os: macos-15
+            xcode: /Applications/Xcode_16.0.app
+            flutter-version: 3.27.x
+            compat-app: true
+          # The example app gets the plugin through Swift Package Manager (Flutter 3.44+). The
+          # newest macOS image with its default Xcode.
+          - name: 'iOS: build and unit tests (Flutter stable, Swift Package Manager)'
+            os: macos-26
+            xcode: ''
+            flutter-version: ''
+            compat-app: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode
+        if: matrix.xcode != ''
+        env:
+          XCODE_APP: ${{ matrix.xcode }}
+        run: sudo xcode-select --switch "$XCODE_APP"
+
+      - name: Xcode version
+        run: xcodebuild -version
+
+      # `cache: false` (the default), as in ci.yml.
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ matrix.flutter-version }}
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Create an app on Flutter 3.27.x
+        if: matrix.compat-app
+        run: |
+          app_dir="$RUNNER_TEMP/becklink_compat_app"
+          bash .github/scripts/compat-app.sh ios "$app_dir"
+          echo "APP_DIR=$app_dir" >> "$GITHUB_ENV"
+
+      - name: Use the example app
+        if: ${{ !matrix.compat-app }}
+        run: |
+          app_dir="$GITHUB_WORKSPACE/example"
+          (cd "$app_dir" && flutter pub get)
+          echo "APP_DIR=$app_dir" >> "$GITHUB_ENV"
+
+      - name: Release build (no code signing)
+        working-directory: ${{ env.APP_DIR }}
+        run: flutter build ios --release --no-codesign
+
+      - name: Plugin came in through CocoaPods
+        if: matrix.compat-app
+        working-directory: ${{ env.APP_DIR }}
+        run: grep -q 'becklink_flutter' ios/Podfile.lock
+
+      - name: Plugin came in through Swift Package Manager
+        if: ${{ !matrix.compat-app }}
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          grep -q 'becklink_flutter' \
+            ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift
+
+      # An iPhone on the newest iOS runtime; device names differ between images and Xcode versions.
+      - name: Pick a simulator
+        id: simulator
+        if: ${{ !matrix.compat-app }}
+        run: |
+          udid="$(xcrun simctl list devices available --json | jq -r '
+            [ .devices | to_entries[]
+              | select(.key | test("\\.iOS-[0-9]+(-[0-9]+)*$"))
+              | (.key | capture("iOS-(?<v>[0-9-]+)$").v | split("-") | map(tonumber)) as $os
+              | .value[] | select(.name | startswith("iPhone"))
+              | { udid, os: $os } ]
+            | sort_by(.os) | last | .udid // empty')"
+          if [ -z "$udid" ]; then
+            echo "::error::No available iPhone simulator."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+
+      # RunnerTests (example/ios/RunnerTests); the scheme's pre-action prepares the Flutter
+      # framework for the Debug simulator build.
+      - name: Plugin unit tests (XCTest)
+        if: ${{ !matrix.compat-app }}
+        working-directory: ${{ env.APP_DIR }}/ios
+        env:
+          SIMULATOR_UDID: ${{ steps.simulator.outputs.udid }}
+        run: |
+          xcodebuild test \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Debug \
+            -destination "id=$SIMULATOR_UDID" \
+            -only-testing:RunnerTests

@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The SDK calls api.becklinks.com; Flutter apps only declare INTERNET in debug builds. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- The Play Install Referrer service lives in the Play Store app, which Android 11+ hides
+         from apps that do not declare it. Declared here so the deferred deep-link match never
+         depends on what the installreferrer library's own manifest declares. Visibility of this
+         one package only; no QUERY_ALL_PACKAGES. -->
+    <queries>
+        <package android:name="com.android.vending" />
+    </queries>
+</manifest>

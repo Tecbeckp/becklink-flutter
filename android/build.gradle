@@ -1,0 +1,115 @@
+// Groovy rather than Kotlin DSL: the Kotlin setup below depends on the AGP and Kotlin Gradle Plugin
+// versions of the consuming app (Flutter 3.27 to current), and only Groovy resolves the
+// version-specific APIs at run time instead of compiling against one version.
+
+group = "app.becklink.flutter"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    // Used only when the app does not bring these plugins itself; inside an app build the app's
+    // AGP and Kotlin Gradle Plugin versions win. Kept at versions the oldest supported Flutter
+    // (3.27, AGP 8.1 template) can load.
+    ext.kotlin_version = "2.1.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.1.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+
+// Who compiles the Kotlin sources depends on the app's Android Gradle Plugin (AGP):
+// - AGP 9 with built-in Kotlin (AGP 9's default, Flutter 3.47+): AGP itself, and applying the
+//   Kotlin Gradle Plugin (KGP) would fail the build.
+// - AGP 8, or AGP 9 with android.builtInKotlin=false (Flutter 3.44's template): KGP, which we
+//   apply here because Flutter before 3.44 never applies it for plugins.
+// pluginManager.apply instead of an `apply plugin:` line: Flutter 3.44+ scans build files for that
+// line and would list this plugin as not migrated to built-in Kotlin, although it only applies KGP
+// where Flutter would apply it itself.
+def agpMajorVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize(".")[0] as int
+def builtInKotlinProperty = project.findProperty("android.builtInKotlin")
+def builtInKotlinActive = agpMajorVersion >= 9 &&
+        (builtInKotlinProperty == null || Boolean.parseBoolean(builtInKotlinProperty.toString()))
+if (!builtInKotlinActive) {
+    pluginManager.apply("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "app.becklink.flutter"
+
+    // Flutter 3.27's default; Flutter warns when a plugin compiles against a newer SDK than the
+    // app. Libraries set no targetSdk: the app's targetSdk applies.
+    compileSdk = 35
+
+    // Java 11 like the Flutter 3.27 plugin template, so apps still on AGP 7 (JDK 11) can build.
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    sourceSets {
+        main.java.srcDirs("src/main/kotlin")
+        test.java.srcDirs("src/test/kotlin")
+    }
+
+    defaultConfig {
+        // Product minimum (Android 6.0); an app's own minSdk from Flutter may be higher.
+        minSdk = 23
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            useJUnitPlatform()
+
+            outputs.upToDateWhen { false }
+
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                showStandardStreams = true
+            }
+        }
+    }
+}
+
+// KGP 1.9+ and built-in Kotlin offer kotlin.compilerOptions; Flutter 3.27-era apps ship KGP 1.8,
+// which only has android.kotlinOptions.
+def kotlinExtension = project.extensions.findByName("kotlin")
+if (kotlinExtension != null && kotlinExtension.hasProperty("compilerOptions")) {
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+        }
+    }
+} else {
+    android.kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+}
+
+dependencies {
+    // Google Play Install Referrer: the certain deferred deep-link match on Android.
+    implementation("com.android.installreferrer:installreferrer:2.2")
+
+    // JVM unit tests (src/test/kotlin) use JUnit Jupiter directly on the JUnit Platform
+    // (useJUnitPlatform above), not kotlin-test's framework inference, which built-in Kotlin
+    // (AGP 9) may not do; Gradle 9 needs the launcher on the test runtime classpath. 5.x because
+    // JUnit 6 needs Java 17, and this module targets Java 11.
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.4")
+    testImplementation("org.mockito:mockito-core:5.0.0")
+}

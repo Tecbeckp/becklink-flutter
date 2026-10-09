@@ -1,0 +1,38 @@
+name: becklink_flutter
+description: Deep links, deferred deep links and attribution for Flutter apps with Beck Link.
+version: 0.1.0
+homepage: https://becklinks.com
+repository: https://github.com/Tecbeckp/becklink-flutter
+issue_tracker: https://github.com/Tecbeckp/becklink-flutter/issues
+
+environment:
+  # Oldest supported Flutter is 3.27 (Dart 3.6); android/build.gradle handles both the
+  # Kotlin Gradle Plugin layout and AGP 9 built-in Kotlin.
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.6.0
+  # Lower bound is the version Flutter 3.27 pins, so every supported Flutter resolves.
+  meta: ^1.15.0
+
+dev_dependencies:
+  # Virtual time for the retry, backoff and deadline tests; the lower bound is the version
+  # Flutter 3.27 pins.
+  fake_async: ^1.3.1
+  # 5.x is the newest that resolves on Dart 3.6; newer SDKs pick 6.x.
+  flutter_lints: ">=5.0.0 <7.0.0"
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.5
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: app.becklink.flutter
+        pluginClass: BeckLinkPlugin
+      ios:
+        pluginClass: BeckLinkPlugin

@@ -1,0 +1,11 @@
+// Beck Link settings of the debug app (see ../../DEBUGGING.md). Replace the placeholder with your
+// project's link host.
+
+// Link host of your project environment, in lower case: {slug}-test.becklinks.com for test links,
+// {slug}.becklinks.com for live links. Runner/Runner.entitlements turns it into the Associated
+// Domains entry applinks:<host>.
+BECKLINK_LINK_HOST = REPLACE_WITH_YOUR_LINK_HOST
+
+// Custom URI scheme; set the same scheme for the iOS app in the dashboard so Beck Link pages use
+// it for "Open in app" (becklinkdebug://becklink?url=…). Registered in Runner/Info.plist.
+BECKLINK_URI_SCHEME = becklinkdebug

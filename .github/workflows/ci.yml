@@ -1,0 +1,230 @@
+name: Flutter SDK
+
+# Checks the becklink_flutter plugin (owner decision D6) on the current Flutter stable and
+# on the oldest supported Flutter, 3.27. The example app uses the current
+# Flutter template, so the 3.27 jobs build a fresh `flutter create` app that depends on the plugin
+# by path (.github/scripts/compat-app.sh). Not covered here: the device integration
+# test (example/integration_test) and real-device link checks, which need an emulator or a phone.
+#
+# Pull requests and pushes run the Linux jobs only. The iOS jobs (ios.yml) need macOS
+# runners, whose minutes count 10 times against a private repository's free Actions minutes, so
+# they run only when this workflow is started by hand and, through publish.yml, on
+# every release tag before publishing.
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  # Run by hand to build iOS before merging a change to the plugin's Swift code or iOS setup, and
+  # after a new Flutter stable, which can break the build without a change here.
+  workflow_dispatch:
+    inputs:
+      ios:
+        description: 'Also run the iOS builds (macOS; each minute counts 10x against free minutes)'
+        type: boolean
+        default: true
+
+# The event is part of the group so that a push does not cancel a manual run (and its macOS
+# minutes) on the same branch, or the reverse.
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_SUPPRESS_ANALYTICS: 'true'
+
+# subosito/flutter-action runs with `cache: false` (its default): its cache steps use an action
+# pinned by tag only, and this repository pins every action to a commit.
+
+jobs:
+  dart:
+    name: 'Dart: format, analyze, test'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - name: Flutter version
+        run: flutter --version
+
+      # Resolves the plugin and example/.
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed .
+
+      # Covers example/ too (its own pubspec and analysis_options.yaml); infos fail the check.
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Version consistency
+        working-directory: .
+        run: bash .github/scripts/version-check.sh
+
+      - name: SDK unit tests
+        run: flutter test
+
+      - name: Example unit tests
+        working-directory: example
+        run: flutter test
+
+  dart-oldest:
+    name: 'Dart: tests on Flutter 3.27.x'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: 3.27.x
+
+      - name: Flutter version
+        run: flutter --version
+
+      # The example needs Dart ^3.12, so it is left out here; --no-pub below keeps `flutter test`
+      # from resolving it again.
+      - name: Install dependencies
+        run: flutter pub get --no-example
+
+      - name: SDK unit tests
+        run: flutter test --no-pub
+
+  android:
+    name: 'Android: build and unit tests (Flutter ${{ matrix.flutter }})'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Template with AGP 8.1, Kotlin Gradle plugin 1.8.22 and Gradle 8.3: the plugin's
+          # Kotlin must compile with Kotlin 1.8.
+          - flutter: 3.27.x
+            flutter-version: 3.27.x
+            compat-app: true
+          # The example app: AGP 9, Gradle 9.
+          - flutter: stable
+            flutter-version: ''
+            compat-app: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # AGP 8.1 to 9 all run on Java 17; Gradle 8.3 (Flutter 3.27's template) does not run on 21+.
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ matrix.flutter-version }}
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Create an app on Flutter ${{ matrix.flutter }}
+        if: matrix.compat-app
+        run: |
+          app_dir="$RUNNER_TEMP/becklink_compat_app"
+          bash .github/scripts/compat-app.sh android "$app_dir"
+          echo "APP_DIR=$app_dir" >> "$GITHUB_ENV"
+
+      - name: Use the example app
+        if: ${{ !matrix.compat-app }}
+        run: |
+          app_dir="$GITHUB_WORKSPACE/example"
+          (cd "$app_dir" && flutter pub get)
+          echo "APP_DIR=$app_dir" >> "$GITHUB_ENV"
+
+      # Writes the Gradle wrapper and local.properties, which are not in git.
+      - name: Generate the Gradle project
+        working-directory: ${{ env.APP_DIR }}
+        run: flutter build apk --config-only
+
+      - name: Plugin unit tests (JUnit)
+        working-directory: ${{ env.APP_DIR }}/android
+        run: ./gradlew :becklink_flutter:testDebugUnitTest
+
+      # Errors fail the build, NewApi among them: the plugin's minSdk is 23.
+      - name: Plugin Android lint
+        if: ${{ !matrix.compat-app }}
+        working-directory: ${{ env.APP_DIR }}/android
+        run: ./gradlew :becklink_flutter:lintDebug
+
+      # Release builds shrink with R8 and apply the plugin's consumer-rules.pro.
+      - name: Release APK (R8)
+        working-directory: ${{ env.APP_DIR }}
+        run: flutter build apk --release
+
+      # Flutter's template keeps AGP 9's built-in Kotlin off (android.builtInKotlin=false), so the
+      # steps above compile the plugin with the Kotlin Gradle plugin. Apps that turn it on (Flutter
+      # 3.47+) have AGP compile it; this is Flutter's validation for plugin authors, with the
+      # property on the command line instead of in the example's gradle.properties.
+      - name: Plugin with AGP 9 built-in Kotlin
+        if: ${{ !matrix.compat-app }}
+        working-directory: ${{ env.APP_DIR }}/android
+        run: |
+          ./gradlew -Pandroid.builtInKotlin=true \
+            :becklink_flutter:assembleRelease :becklink_flutter:testDebugUnitTest
+
+      - name: Upload Gradle reports
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-reports-${{ matrix.flutter }}
+          path: ${{ env.APP_DIR }}/build/becklink_flutter/reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # macOS: manual runs only (see the header). Untick "Also run the iOS builds" for Linux only.
+  ios:
+    name: iOS
+    if: github.event_name == 'workflow_dispatch' && inputs.ios
+    uses: ./.github/workflows/ios.yml
+
+  publish-dry-run:
+    name: 'pub.dev: publish dry-run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Warnings fail it too, as they would block the publish workflow.
+      - name: Publish dry run
+        run: flutter pub publish --dry-run

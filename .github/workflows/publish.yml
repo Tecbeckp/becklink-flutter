@@ -1,0 +1,88 @@
+name: Flutter SDK publish
+
+# Publishes becklink_flutter (repository root) to pub.dev when a `v<version>` tag is
+# pushed (Phase 7 T13). Uses pub.dev automated publishing: GitHub's short-lived OIDC token, no
+# stored pub.dev credential. One-time setup and the release steps: README.md,
+# "Releasing". The steps follow dart-lang/setup-dart's reusable publish workflow; it is not called
+# directly because its job grants only id-token, which cannot check out a private repository.
+# Pull requests do not build iOS (macOS minutes; see ci.yml), so this workflow runs the
+# iOS builds on the tagged commit and publishes only when they pass.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Never cancel a publish half-way; a second tag waits for the first.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_SUPPRESS_ANALYTICS: 'true'
+
+jobs:
+  # Cheap checks before the environment's reviewers are asked: a wrong tag fails here.
+  verify:
+    name: Check tag, version and changelog
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Tag, pubspec version, sdkVersion and CHANGELOG agree
+        env:
+          TAG: ${{ github.ref_name }}
+        run: bash .github/scripts/version-check.sh --tag "$TAG"
+
+  # After verify, so a wrong tag spends no macOS minutes; before publish, so its reviewers are asked
+  # only once the iOS builds passed.
+  ios:
+    name: iOS
+    needs: verify
+    uses: ./.github/workflows/ios.yml
+
+  publish:
+    name: Publish to pub.dev
+    needs: [verify, ios]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    # pub.dev can require this environment (package admin, "Automated publishing"); its protection
+    # rules on GitHub decide who may approve a release.
+    environment: pub.dev
+    permissions:
+      contents: read
+      id-token: write # The OIDC token pub.dev accepts instead of a stored credential.
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Creates the pub.dev OIDC token and registers it with `dart pub token add`; Flutter's pub
+      # reads the same token store. Flutter's `dart`, set up next, shadows this one.
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Fails on warnings, which `--force` below would publish with.
+      - name: Publish dry run
+        run: flutter pub publish --dry-run
+
+      - name: Publish
+        run: flutter pub publish --force
