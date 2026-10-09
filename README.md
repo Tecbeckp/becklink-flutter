@@ -27,8 +27,14 @@ Deep links, deferred deep links and install attribution for Flutter apps on Andr
 
 ## Install
 
-The package is not yet published on pub.dev. Until it is, add it as a git dependency in
-`pubspec.yaml` (this needs read access to the repository):
+Add the package from [pub.dev](https://pub.dev/packages/becklink_flutter):
+
+```sh
+flutter pub add becklink_flutter
+```
+
+This adds `becklink_flutter: ^0.1.1` to your `pubspec.yaml`. To try an unreleased change, depend on
+the repository instead:
 
 ```yaml
 dependencies:
@@ -36,12 +42,6 @@ dependencies:
     git:
       url: https://github.com/Tecbeckp/becklink-flutter.git
       ref: main
-```
-
-Once it is published:
-
-```sh
-flutter pub add becklink_flutter
 ```
 
 ## Quick start (5 minutes)
@@ -735,7 +735,7 @@ run only:
 
 One-time setup:
 
-1. Publish the first version by hand (`flutter pub publish` in the repository root): pub.dev automates
+1. Done: 0.1.0 was published by hand (`flutter pub publish` in the repository root), because pub.dev automates
    only packages that already exist.
 2. On pub.dev, open the package's **Admin** tab → **Automated publishing** → **Enable publishing
    from GitHub Actions**, with repository `Tecbeckp/becklink-flutter` and tag pattern

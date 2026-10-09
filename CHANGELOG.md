@@ -4,6 +4,12 @@ All notable changes to `becklink_flutter` are documented here. The format follow
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
 
+## 0.1.1 (2026-10-09)
+
+### Changed
+
+- README: the Install section now uses `flutter pub add becklink_flutter` from pub.dev.
+
 ## 0.1.0 (2026-10-09)
 
 First release, for Android 6.0+ (API 23) and iOS 15+ (Xcode 16+), on Flutter 3.27+ (Dart 3.6+).

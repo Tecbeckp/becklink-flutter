@@ -10,4 +10,4 @@ const String sdkName = 'becklink_flutter';
 /// Must equal `version` in pubspec.yaml: the server decides which enum
 /// values it may send by this value (contract section 13), so a stale value
 /// could deliver values this SDK version does not know.
-const String sdkVersion = '0.1.0';
+const String sdkVersion = '0.1.1';
