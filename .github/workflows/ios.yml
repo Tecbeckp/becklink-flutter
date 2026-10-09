@@ -26,11 +26,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Flutter 3.27 to 3.43 apps get the plugin through CocoaPods. Xcode 16.0 is the oldest
-          # Xcode on GitHub's macOS images and the documented minimum.
+          # Flutter 3.27 to 3.43 apps get the plugin through CocoaPods. Xcode 16.4 is the newest 16.x
+          # Xcode 16 on GitHub's macOS images with its simulator runtime (16.0 lacks it there).
           - name: 'iOS: build (Flutter 3.27.x, CocoaPods)'
             os: macos-15
-            xcode: /Applications/Xcode_16.0.app
+            xcode: /Applications/Xcode_16.4.app
             flutter-version: 3.27.x
             compat-app: true
           # The example app gets the plugin through Swift Package Manager (Flutter 3.44+). The
@@ -80,6 +80,14 @@ jobs:
       - name: Release build (no code signing)
         working-directory: ${{ env.APP_DIR }}
         run: flutter build ios --release --no-codesign
+
+      - name: Show the generated Swift package
+        if: ${{ failure() && !matrix.compat-app }}
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          cat ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift
+          ls -la ios/Flutter/ephemeral/Packages/.packages || true
+          grep -n "becklink" ios/Runner.xcodeproj/project.pbxproj | head -20
 
       - name: Plugin came in through CocoaPods
         if: matrix.compat-app
