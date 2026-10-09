@@ -43,6 +43,28 @@ final _dnsLabel = RegExp(r'^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$');
 // One short-path segment (LNK-002).
 final _shortPath = RegExp(r'^/[A-Za-z0-9_-]{1,64}$');
 
+// A URL-template item (contract section 9.1, ADR 0009): `/c/4521`, two to
+// four segments. The server owns the real rule (which template, which id
+// format); the SDK only keeps out paths that cannot be one. A segment is
+// non-empty and made of URL path characters; the first must start with a
+// letter or digit.
+final _pathSegment = RegExp(r"^[A-Za-z0-9._~%!$&'()*+,;=:@-]+$");
+final _firstSegmentStart = RegExp(r'^[A-Za-z0-9]');
+
+// Three fixed segments of up to 32 characters and an id of up to 128
+// characters, each of which can take three when percent-encoded.
+const int _maxTemplatePathLength = 3 * 33 + 128 * 3 + 8;
+
+// Paths the platform answers itself (`RESERVED_LINK_PATHS`, packages/shared).
+const Set<String> _reservedFirstSegments = <String>{
+  'api',
+  'admin',
+  'qr',
+  'healthz',
+  'readyz',
+  'apple-app-site-association',
+};
+
 /// The two shapes of Beck Link URL (contract section 9.1).
 enum LinkUrlForm {
   /// Form 1: `https://{host}/{path}[?query]`, an App Link or Universal Link.
@@ -191,7 +213,9 @@ final class LinkUrlRules {
   bool _isLinkUrl(Uri uri, SdkEnvironment environment, bool includeLinkHosts) {
     // Dart's Uri drops the default port 443, so any port left is another.
     if (uri.userInfo.isNotEmpty || uri.hasPort) return false;
-    if (!_shortPath.hasMatch(uri.path)) return false;
+    if (!_shortPath.hasMatch(uri.path) && !_isTemplatePath(uri.path)) {
+      return false;
+    }
     return _acceptsHost(uri.host.toLowerCase(), environment, includeLinkHosts);
   }
 
@@ -203,6 +227,24 @@ final class LinkUrlRules {
     if (includeLinkHosts && linkHosts.contains(host)) return true;
     return platformHostEnvironment(host) == environment;
   }
+}
+
+/// Whether [path] has the shape of a URL-template item path: two to four
+/// non-empty segments (one trailing slash tolerated), the first not one the
+/// platform reserves (`_c`, `api`, `.well-known` …).
+bool _isTemplatePath(String path) {
+  if (!path.startsWith('/') || path.length > _maxTemplatePathLength) {
+    return false;
+  }
+  final trimmed = path.length > 1 && path.endsWith('/')
+      ? path.substring(0, path.length - 1)
+      : path;
+  final segments = trimmed.substring(1).split('/');
+  if (segments.length < 2 || segments.length > 4) return false;
+  if (!segments.every(_pathSegment.hasMatch)) return false;
+  final first = segments.first;
+  return _firstSegmentStart.hasMatch(first) &&
+      !_reservedFirstSegments.contains(first.toLowerCase());
 }
 
 /// Whether [url] is a Beck Link URL on a platform link host of either

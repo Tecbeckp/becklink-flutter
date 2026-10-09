@@ -28,6 +28,62 @@ void main() {
       expect(event.clickedAt.isUtc, isTrue);
     });
 
+    test('reads the item of a URL-template link (ADR 0009)', () {
+      final event = LinkEvent.fromJson(
+        linkEventJson(
+          path: '/challenge/4521',
+          withCampaign: false,
+          resource: const <String, Object?>{'type': 'challenge', 'id': '4521'},
+        ),
+      );
+
+      expect(event.resource, const LinkResource(type: 'challenge', id: '4521'));
+      expect(event.resource?.type, 'challenge');
+      expect(event.resource?.id, '4521');
+      expect(LinkEvent.fromJson(event.toJson()), event);
+      expect(
+        event.toJson()['resource'],
+        <String, Object?>{'type': 'challenge', 'id': '4521'},
+      );
+    });
+
+    test('has no resource for an ordinary link or an older server', () {
+      expect(LinkEvent.fromJson(linkEventJson()).resource, isNull);
+
+      final withoutKey = linkEventJson()..remove('resource');
+      expect(LinkEvent.fromJson(withoutKey).resource, isNull);
+    });
+
+    test('rejects a resource whose members are not strings', () {
+      expect(
+        () => LinkEvent.fromJson(
+          linkEventJson(
+              resource: const <String, Object?>{'type': 'c', 'id': 4}),
+        ),
+        throwsA(isA<MalformedJsonException>()),
+      );
+      expect(
+        () => LinkEvent.fromJson(
+          linkEventJson(resource: const <String, Object?>{'type': 'c'}),
+        ),
+        throwsA(isA<MalformedJsonException>()),
+      );
+    });
+
+    test('keeps the item id out of the log description', () {
+      final event = LinkEvent.fromJson(
+        linkEventJson(
+          resource: const <String, Object?>{
+            'type': 'challenge',
+            'id': 'secret-id'
+          },
+        ),
+      );
+
+      expect(event.toString(), contains('resource: challenge'));
+      expect(event.toString(), isNot(contains('secret-id')));
+    });
+
     test('round-trips through toJson', () {
       final event = LinkEvent.fromJson(
         linkEventJson(

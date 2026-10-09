@@ -13,6 +13,7 @@ export 'src/models/confidence.dart' show Confidence;
 export 'src/models/diagnostics.dart' show BeckLinkDiagnostics, FirstOpenStatus;
 export 'src/models/link_event.dart' show LinkEvent;
 export 'src/models/link_options.dart' show LinkOptions;
+export 'src/models/link_resource.dart' show LinkResource;
 export 'src/models/log_level.dart' show LogLevel;
 export 'src/models/match_method.dart' show MatchMethod;
 export 'src/models/remote_config.dart' show RemoteConfig;

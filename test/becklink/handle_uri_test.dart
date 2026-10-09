@@ -39,6 +39,12 @@ void main() {
       ('https://becklinks.com/summer24', false, false),
       ('https://a.b.becklinks.com/summer24', false, false),
       ('https://$testHost/', false, false),
+      ('https://$testHost/c/4521', true, false),
+      ('https://$testHost/c/4521/?ref=x', true, false),
+      ('https://$liveHost/c/4521', false, true),
+      ('https://$testHost/a/b/c/d/e', false, false),
+      ('https://$testHost/_c/$clickId', false, false),
+      ('https://$testHost/api/4521', false, false),
       ('acmeshop://becklink?url=${Uri.encodeComponent(testUrl)}', true, false),
       ('acmeshop://becklink?url=${Uri.encodeComponent(liveUrl)}', false, true),
       ('acmeshop://becklink?url=https%3A%2F%2Fevil.com%2Fx', false, false),
@@ -117,6 +123,44 @@ void main() {
       expect(received.single.linkId, linkId);
       expect(received.single.isDeferred, isFalse);
       expect(device.api.to(SdkPaths.open).single.json['url'], testLinkUrl);
+      await subscription.cancel();
+    });
+
+    test('delivers the item of a URL-template link', () async {
+      final device = newDevice();
+      final sdk = await device.launchRegistered();
+      await sdk.getInitialLink();
+      final received = <LinkEvent>[];
+      final subscription = sdk.onLink.listen(received.add);
+      const itemUrl = 'https://$testHost/c/4521';
+      device.api.enqueue(
+        SdkPaths.open,
+        (_) => jsonResponse(<String, Object?>{
+          'link_event': linkEventJson(
+            url: itemUrl,
+            path: '/challenge/4521',
+            params: const <String, Object?>{},
+            data: const <String, Object?>{'kind': 'challenge'},
+            withCampaign: false,
+            resource: const <String, Object?>{
+              'type': 'challenge',
+              'id': '4521'
+            },
+          ),
+        }),
+      );
+
+      final taken = await sdk.handleUri(Uri.parse(itemUrl));
+      await eventually(() => received.isNotEmpty);
+      await settle();
+
+      expect(taken, isTrue);
+      expect(device.api.to(SdkPaths.open).single.json['url'], itemUrl);
+      expect(received.single.path, '/challenge/4521');
+      expect(
+        received.single.resource,
+        const LinkResource(type: 'challenge', id: '4521'),
+      );
       await subscription.cancel();
     });
 

@@ -21,6 +21,53 @@ void main() {
       expect(liveRules.classify('https://$liveHost/summer24'), isNotNull);
     });
 
+    test('accepts URL-template item paths (ADR 0009)', () {
+      for (final path in <String>[
+        '/c/4521',
+        '/c/4521/',
+        '/s/Ab_-9',
+        '/c/a%2Bb%3D',
+        '/c/a+b=',
+        '/a/b/c/4521',
+        '/Challenge-1/ABC',
+      ]) {
+        final url = testRules.classify('https://$testHost$path?x=1');
+        expect(url, isNotNull, reason: path);
+        expect(url!.link.path, path);
+      }
+    });
+
+    test('accepts a URL-template item inside the custom-scheme form', () {
+      final embedded = Uri.encodeComponent('https://$testHost/c/4521');
+      final url = testRules.classify('myapp://becklink?url=$embedded');
+
+      expect(url, isNotNull);
+      expect(url!.form, LinkUrlForm.customScheme);
+      expect(url.link.path, '/c/4521');
+    });
+
+    test('refuses paths that cannot be a link or an item', () {
+      for (final path in <String>[
+        '/',
+        '/a/b/c/d/e',
+        '/c//4521',
+        '//c/4521',
+        '/_c/01ARZ3NDEKTSV4RRFFQ69G5FAV',
+        '/api/4521',
+        '/Admin/4521',
+        '/qr/4521',
+        '/.well-known/assetlinks.json',
+        '/c/ab cd',
+        '/c/${'a' * 400}',
+      ]) {
+        expect(
+          testRules.classify('https://$testHost$path'),
+          isNull,
+          reason: path,
+        );
+      }
+    });
+
     test('refuses a link of the other environment, and can tell why', () {
       const liveLink = 'https://$liveHost/summer24';
 
@@ -79,7 +126,7 @@ void main() {
         'https://$testHost:8443/summer24',
         'https://user@$testHost/summer24',
         'https://$testHost/',
-        'https://$testHost/a/b',
+        'https://$testHost/a/b/c/d/e',
         'https://$testHost/${'a' * 65}',
         'https://$testHost/sum mer',
         'https://example.com/summer24',

@@ -71,6 +71,7 @@ Map<String, Object?> linkEventJson({
     'color': 'blue',
   },
   bool withCampaign = true,
+  Map<String, Object?>? resource,
   String clickedAt = '2026-10-07T08:41:17.204Z',
 }) =>
     <String, Object?>{
@@ -84,6 +85,7 @@ Map<String, Object?> linkEventJson({
       'link_id': id,
       'campaign': withCampaign ? campaignJson() : null,
       'clicked_at': clickedAt,
+      'resource': resource,
     };
 
 /// An `attribution` object (contract section 7.4).

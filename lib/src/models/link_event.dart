@@ -4,6 +4,7 @@ import '../json/json_reader.dart';
 import '../json/json_value.dart';
 import 'campaign.dart';
 import 'confidence.dart';
+import 'link_resource.dart';
 import 'match_method.dart';
 import 'redaction.dart';
 
@@ -30,6 +31,7 @@ final class LinkEvent {
     Map<String, Object?> data = const <String, Object?>{},
     this.linkId,
     this.campaign,
+    this.resource,
   })  : params = Map<String, String>.unmodifiable(params),
         data = _checkData(data),
         clickedAt = clickedAt.toUtc();
@@ -80,6 +82,13 @@ final class LinkEvent {
   /// The link's campaign fields, or `null` when it has none.
   final Campaign? campaign;
 
+  /// The item a URL-template link names, such as challenge `4521`, or `null`
+  /// for an ordinary link (and for an event the SDK built on the device).
+  ///
+  /// The route in [path] already carries the item for templates that put it
+  /// there (`/challenge/4521`); this is the same item as structured data.
+  final LinkResource? resource;
+
   /// For a deferred match, when the link was clicked; for a direct open,
   /// when the app received the URL. Always UTC.
   final DateTime clickedAt;
@@ -95,6 +104,7 @@ final class LinkEvent {
         'confidence': confidence.wireValue,
         'link_id': linkId,
         'campaign': campaign?.toJson(),
+        'resource': resource?.toJson(),
         'clicked_at': clickedAt.toIso8601String(),
       };
 
@@ -110,6 +120,7 @@ final class LinkEvent {
       other.confidence == confidence &&
       other.linkId == linkId &&
       other.campaign == campaign &&
+      other.resource == resource &&
       other.clickedAt == clickedAt;
 
   @override
@@ -123,6 +134,7 @@ final class LinkEvent {
         confidence,
         linkId,
         campaign,
+        resource,
         clickedAt,
       );
 
@@ -135,6 +147,7 @@ final class LinkEvent {
       'matchMethod: ${matchMethod.wireValue}, '
       'confidence: ${confidence.wireValue}, linkId: $linkId, '
       'campaign: ${campaign?.name}, '
+      'resource: ${resource?.type}, '
       'clickedAt: ${clickedAt.toIso8601String()})';
 
   static Map<String, Object?> _checkData(Map<String, Object?> data) {
@@ -152,6 +165,8 @@ final class LinkEvent {
 /// Reads a [LinkEvent] from [reader]. Internal to the SDK.
 LinkEvent readLinkEvent(JsonReader reader) {
   final campaign = reader.optionalObject('campaign');
+  // Absent from servers that predate URL templates.
+  final resource = reader.optionalObject('resource');
   return LinkEvent(
     url: reader.uri('url'),
     path: reader.string('path'),
@@ -162,6 +177,7 @@ LinkEvent readLinkEvent(JsonReader reader) {
     confidence: Confidence.fromWire(reader.string('confidence')),
     linkId: reader.optionalString('link_id'),
     campaign: campaign == null ? null : readCampaign(campaign),
+    resource: resource == null ? null : readLinkResource(resource),
     clickedAt: reader.timestamp('clicked_at'),
   );
 }

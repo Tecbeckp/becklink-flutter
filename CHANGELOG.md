@@ -4,6 +4,18 @@ All notable changes to `becklink_flutter` are documented here. The format follow
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- `LinkEvent.resource` (`LinkResource` with `type` and `id`): the item a URL-template link names,
+  such as challenge `4521` for `https://acme.becklinks.com/c/4521`. `null` for ordinary links.
+- The SDK now recognises URL-template paths of two to four segments (`/c/4521`) as Beck Link URIs
+  on the project's link hosts, in `onLink`, `isBeckLinkUri` and `handleUri`, so apps that use
+  Beck Link URL templates receive them like any other link. Paths the platform reserves (`/_c/…`,
+  `/api/…`) are still ignored.
+- README section "Links to every item (URL templates)".
+
 ## 0.1.1 (2026-10-09)
 
 ### Changed

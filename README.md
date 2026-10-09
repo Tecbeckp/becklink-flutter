@@ -342,7 +342,34 @@ adb shell pm verify-app-links --re-verify com.acme.shop
   SDK logs "The link is not active in this project environment".
 
 `LinkEvent` fields: `url`, `path` (the in-app route), `params` (query parameters), `data` (custom
-JSON), `isDeferred`, `matchMethod`, `confidence`, `linkId`, `campaign`, `clickedAt`.
+JSON), `isDeferred`, `matchMethod`, `confidence`, `linkId`, `campaign`, `resource`, `clickedAt`.
+
+### Links to every item (URL templates)
+
+An app with thousands of items (challenges, products, profiles) does not need a link per item. In
+the dashboard you define a URL pattern such as `https://acme.becklinks.com/c/{id}`; every item then
+has a working link, and `LinkEvent.resource` tells you which one opened the app:
+
+```dart
+void routeLink(LinkEvent link) {
+  final item = link.resource; // LinkResource(type: 'challenge', id: '4521'), or null
+  if (item != null && item.type == 'challenge') {
+    openChallenge(item.id); // fetch it through your own API
+    return;
+  }
+  // ... ordinary links: route by link.path
+}
+```
+
+- `path` already holds the template's in-app route with the id filled in (`/challenge/4521`), so
+  an app that routes by `path` needs no change.
+- `resource.id` is the value from the URL, percent-decoded and at most 128 characters. Beck Link
+  checks that it fits the format the template allows (digits, UUID, base64url, …); it does not know
+  whether the item exists or the user may see it, so load it through your own API and handle
+  "not found".
+- Template links also work after install: a deferred match returns the same `resource`.
+- `resource` is `null` for ordinary links, and for the offline event the SDK builds on the device
+  (the service could not be reached); route those to a sensible default.
 
 ## Apps that already handle deep links (app_links, go_router, GetX)
 
@@ -602,7 +629,8 @@ The full reference is in the package's dartdoc. Summary:
 
 | Type                | Contents                                                                                                                |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `LinkEvent`         | `url`, `path`, `params`, `data`, `isDeferred`, `matchMethod`, `confidence`, `linkId`, `campaign`, `clickedAt`           |
+| `LinkEvent`         | `url`, `path`, `params`, `data`, `isDeferred`, `matchMethod`, `confidence`, `linkId`, `campaign`, `resource`, `clickedAt` |
+| `LinkResource`      | `type` (resource type key), `id` (the item's ID from the URL)                                                           |
 | `Attribution`       | `state`, `matchMethod`, `confidence`, `linkId`, `campaign`, `installedAt`                                               |
 | `Campaign`          | `name`, `source`, `medium`, `content`, `term`, `creative`                                                               |
 | `LinkOptions`       | `deepLinkPath`, `data`, `campaign` (a campaign key), `source`, `medium`, `content`, `term`, `creative`, `expiresAt`     |
