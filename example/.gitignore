@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# The example is a demo; its lock file follows whatever Flutter resolves and made `pub publish`
+# warn about a modified checked-in file.
+/pubspec.lock
