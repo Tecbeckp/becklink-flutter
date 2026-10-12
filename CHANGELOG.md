@@ -4,7 +4,7 @@ All notable changes to `becklink_flutter` are documented here. The format follow
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## 0.2.0 (2026-10-12)
 
 ### Added
 
@@ -15,6 +15,11 @@ All notable changes to `becklink_flutter` are documented here. The format follow
   Beck Link URL templates receive them like any other link. Paths the platform reserves (`/_c/…`,
   `/api/…`) are still ignored.
 - README section "Links to every item (URL templates)".
+
+### Fixed
+
+- A URL-template path whose id holds an escaped space or control character, or is longer than 128
+  characters (32 for a fixed part), is no longer taken for a Beck Link URI.
 
 ## 0.1.1 (2026-10-09)
 

@@ -54,6 +54,8 @@ final _firstSegmentStart = RegExp(r'^[A-Za-z0-9]');
 // Three fixed segments of up to 32 characters and an id of up to 128
 // characters, each of which can take three when percent-encoded.
 const int _maxTemplatePathLength = 3 * 33 + 128 * 3 + 8;
+const int _maxFixedSegmentLength = 32;
+const int _maxItemIdLength = 128;
 
 // Paths the platform answers itself (`RESERVED_LINK_PATHS`, packages/shared).
 const Set<String> _reservedFirstSegments = <String>{
@@ -242,6 +244,20 @@ bool _isTemplatePath(String path) {
   final segments = trimmed.substring(1).split('/');
   if (segments.length < 2 || segments.length > 4) return false;
   if (!segments.every(_pathSegment.hasMatch)) return false;
+  // The decoded segments: an escaped space or control character is not part
+  // of any id format, and the fixed parts and the id have their own limits.
+  for (var i = 0; i < segments.length; i++) {
+    final String decoded;
+    try {
+      decoded = Uri.decodeComponent(segments[i]);
+    } on FormatException {
+      return false;
+    }
+    final limit =
+        i == segments.length - 1 ? _maxItemIdLength : _maxFixedSegmentLength;
+    if (decoded.length > limit) return false;
+    if (decoded.runes.any((rune) => rune <= 0x20 || rune == 0x7f)) return false;
+  }
   final first = segments.first;
   return _firstSegmentStart.hasMatch(first) &&
       !_reservedFirstSegments.contains(first.toLowerCase());

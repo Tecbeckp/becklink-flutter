@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'becklink_flutter'
-  s.version          = '0.1.1'
+  s.version          = '0.2.0'
   s.summary          = 'Deep links, deferred deep links and attribution for Flutter apps with Beck Link.'
   s.description      = <<-DESC
 Deep links, deferred deep links and attribution for Flutter apps with Beck Link.
