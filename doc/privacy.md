@@ -1,7 +1,7 @@
 # Privacy and data disclosure
 
 What `becklinks_flutter` collects, sends and stores, so you can fill in Apple's App Privacy details
-and Google Play's Data safety form. Beck Link processes this data on your behalf; you decide what
+and Google Play's Data safety form. Beck Links processes this data on your behalf; you decide what
 your app discloses. This page describes the SDK's behaviour and is not legal advice.
 
 ## Summary
@@ -11,8 +11,8 @@ your app discloses. This page describes the SDK's behaviour and is not legal adv
 | A random install ID it creates itself                                                            | IDFA, GAID, IDFV, `ANDROID_ID` or any other device identifier        |
 | Link opens, app sessions and the custom events you track                                         | Device names, contacts, photos, precise location                     |
 | Your user ID, only if you call `setUserId()`                                                     | Device fingerprints; there is no probabilistic or IP-based matching  |
-| Platform, OS version, app version and build, device model, locale                                | Pasteboard contents other than a Beck Link click URL of your project |
-| Once per install: the Play install referrer (Android), or the pasteboard click URL (iOS, opt-in) | URLs your app receives that are not Beck Link links                  |
+| Platform, OS version, app version and build, device model, locale                                | Pasteboard contents other than a Beck Links click URL of your project |
+| Once per install: the Play install referrer (Android), or the pasteboard click URL (iOS, opt-in) | URLs your app receives that are not Beck Links links                  |
 | Country and region, derived by the service from the IP address                                   | Raw IP addresses: they are never stored                              |
 
 The SDK never shows the App Tracking Transparency prompt, does not use the Advertising ID, and adds
@@ -50,9 +50,9 @@ Context is used for analytics only, never to match installs to clicks.
 
 | Endpoint                  | When                                                                                                            | Data                                                                                                                                                                                                                                                                                                                                                             |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST /v1/sdk/first-open` | Once per install, at the first launch (retried until it succeeds)                                               | `install_id`, `first_open_id` (a second random ID for this app installation), `user_id` if set, `context`, and evidence: `open_url` (the Beck Link URL that launched the first run), `android_install_referrer` (the raw Play install referrer, normally `click_id=…`), `ios_pasteboard_url` (only with `enablePasteboard`, only `https://{host}/_c/{click ID}`) |
+| `POST /v1/sdk/first-open` | Once per install, at the first launch (retried until it succeeds)                                               | `install_id`, `first_open_id` (a second random ID for this app installation), `user_id` if set, `context`, and evidence: `open_url` (the Beck Links URL that launched the first run), `android_install_referrer` (the raw Play install referrer, normally `click_id=…`), `ios_pasteboard_url` (only with `enablePasteboard`, only `https://{host}/_c/{click ID}`) |
 | `POST /v1/sdk/init`       | At most once per session on later launches (a new session starts after 30 minutes in the background)            | `install_id`, `user_id` if set, `context`                                                                                                                                                                                                                                                                                                                        |
-| `POST /v1/sdk/open`       | For each Beck Link URL that opens the app                                                                       | `url`, `opened_at`, `tracking_enabled`, `install_id` and `user_id` (only while tracking is on), `context`                                                                                                                                                                                                                                                        |
+| `POST /v1/sdk/open`       | For each Beck Links URL that opens the app                                                                       | `url`, `opened_at`, `tracking_enabled`, `install_id` and `user_id` (only while tracking is on), `context`                                                                                                                                                                                                                                                        |
 | `POST /v1/sdk/events`     | Batches of queued events: every 15 seconds, at 20 events, when the app goes to the background, and on `flush()` | `install_id`, `context`, and per event `event_id`, `name`, `timestamp`, `properties`, `revenue`, `currency`, `user_id` if set                                                                                                                                                                                                                                    |
 | `POST /v1/sdk/links`      | When the app calls `createLink()`                                                                               | `deep_link_path`, `data` (plus `referrer_user_id` when a user ID is set and tracking is on), `campaign`, `utm`, `expires_at`, `install_id` (only while tracking is on)                                                                                                                                                                                           |
 
@@ -86,7 +86,7 @@ tracking on again starts a new install with a new ID.
 
 ## Apple App Privacy (App Store Connect)
 
-| Apple data type                     | In Beck Link                                                               | Declare it                             | Linked to the user | Used for tracking | Purposes                     |
+| Apple data type                     | In Beck Links                                                               | Declare it                             | Linked to the user | Used for tracking | Purposes                     |
 | ----------------------------------- | -------------------------------------------------------------------------- | -------------------------------------- | ------------------ | ----------------- | ---------------------------- |
 | Identifiers → Device ID             | The install ID and first-open ID, random IDs created by the SDK            | Always                                 | Yes                | No                | App Functionality, Analytics |
 | Usage Data → Product Interaction    | Link opens, app sessions, custom events, the install's link click          | Always                                 | Yes                | No                | App Functionality, Analytics |
@@ -95,8 +95,8 @@ tracking on again starts a new install with a new ID.
 | Identifiers → User ID               | Your user ID from `setUserId()`, also as `referrer_user_id` in share links | Only if you call `setUserId()`         | Yes                | No                | App Functionality, Analytics |
 | Purchases → Purchase History        | Purchase events and revenue you track                                      | Only if you track purchases or revenue | Yes                | No                | Analytics                    |
 
-- **Tracking:** Beck Link does not combine this data with third-party data for advertising and does
-  not share it with data brokers. If your app itself sends Beck Link data to advertising networks,
+- **Tracking:** Beck Links does not combine this data with third-party data for advertising and does
+  not share it with data brokers. If your app itself sends Beck Links data to advertising networks,
   assess tracking for your app.
 - **Your own data:** event properties and link data contain what you put in them. Declare the data
   types they carry (for example search terms as Search History).
@@ -120,16 +120,16 @@ the "Declare it" column above.
 
 ## Google Play Data safety
 
-| Question                                                              | Answer for the Beck Link SDK                                                                           |
+| Question                                                              | Answer for the Beck Links SDK                                                                           |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Does your app collect or share any of the required user data types?   | Yes: the SDK collects the data below                                                                   |
 | Is all of the user data collected by your app encrypted in transit?   | Yes: HTTPS only                                                                                        |
 | Do you provide a way for users to request that their data is deleted? | Your own answer, based on your app's process                                                           |
-| Shared with third parties?                                            | No: Beck Link processes the data as your service provider, which Google does not count as sharing      |
+| Shared with third parties?                                            | No: Beck Links processes the data as your service provider, which Google does not count as sharing      |
 | Processed ephemerally?                                                | No (the IP address is, but only the derived country and region are kept)                               |
 | Required or optional?                                                 | Optional if your app lets users turn tracking off with `setTrackingEnabled(false)`; otherwise required |
 
-| Data safety category → type            | In Beck Link                                                               | Declare it                             | Purposes                     |
+| Data safety category → type            | In Beck Links                                                               | Declare it                             | Purposes                     |
 | -------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------- | ---------------------------- |
 | Device or other IDs                    | The install ID and first-open ID                                           | Always                                 | App functionality, Analytics |
 | App activity → App interactions        | Link opens, app sessions, custom events, the install's link click          | Always                                 | App functionality, Analytics |
@@ -138,12 +138,12 @@ the "Declare it" column above.
 | Personal info → User IDs               | Your user ID from `setUserId()`, also as `referrer_user_id` in share links | Only if you call `setUserId()`         | App functionality, Analytics |
 | Financial info → Purchase history      | Purchase events and revenue you track                                      | Only if you track purchases or revenue | Analytics                    |
 
-For the Play Console's **Advertising ID** declaration: Beck Link does not use the Advertising ID;
+For the Play Console's **Advertising ID** declaration: Beck Links does not use the Advertising ID;
 answer for your other SDKs.
 
 ## Data retention
 
 - **On the device:** see [What the SDK stores on the device](#what-the-sdk-stores-on-the-device).
-- **On Beck Link's servers:** SDK sessions, clicks and events are kept for your plan's data
+- **On Beck Links's servers:** SDK sessions, clicks and events are kept for your plan's data
   retention period and then deleted; aggregated reports may be kept longer. Your plan's details list
   its retention period. Raw IP addresses and the raw install referrer are never stored.

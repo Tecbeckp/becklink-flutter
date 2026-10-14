@@ -37,3 +37,6 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 /build/
 /coverage/
+
+# The wrapper package keeps its own lock file out of the repository.
+/legacy/*/pubspec.lock

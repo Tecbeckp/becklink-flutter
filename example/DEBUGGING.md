@@ -1,6 +1,6 @@
-# Beck Link Debug app
+# Beck Links Debug app
 
-The example app doubles as a debugging app: install it on a real phone, point it at a Beck Link
+The example app doubles as a debugging app: install it on a real phone, point it at a Beck Links
 server (production, or your local stack) and watch the whole deep-link flow: configuration,
 first open (deferred deep link), attribution, link opens (re-engagement), events, links created by
 the SDK, and every SDK API request with its status, request ID and `Idempotent-Replayed` header.
@@ -103,11 +103,11 @@ development only), find the PC's address with `ipconfig` (IPv4 of the Wi-Fi adap
 port through Windows Defender Firewall for private networks (elevated PowerShell):
 
 ```powershell
-New-NetFirewallRule -DisplayName "Beck Link ingest 4100 (dev)" -Direction Inbound -Protocol TCP -LocalPort 4100 -Action Allow -Profile Private
+New-NetFirewallRule -DisplayName "Beck Links ingest 4100 (dev)" -Direction Inbound -Protocol TCP -LocalPort 4100 -Action Allow -Profile Private
 ```
 
 Check from the phone's browser: `http://192.168.x.x:4100/healthz` answers `200`. Remove the rule
-when you are done (`Remove-NetFirewallRule -DisplayName "Beck Link ingest 4100 (dev)"`).
+when you are done (`Remove-NetFirewallRule -DisplayName "Beck Links ingest 4100 (dev)"`).
 
 Plain HTTP (cleartext) works only in debug builds: `android/app/src/debug/AndroidManifest.xml`
 sets `android:usesCleartextTraffic="true"` (the main manifest keeps Android's default, off), and
@@ -138,7 +138,7 @@ $PKG = "app.becklink.becklinks_flutter_example"
 # App Link (opens the app only when the host is verified, otherwise the browser)
 adb shell am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://myshop-test.becklinks.com/abc123" $PKG
 
-# Custom scheme: always opens the app ("Open in app" form of Beck Link pages)
+# Custom scheme: always opens the app ("Open in app" form of Beck Links pages)
 adb shell am start -W -a android.intent.action.VIEW -d "becklinkdebug://becklink?url=https%3A%2F%2Fmyshop-test.becklinks.com%2Fabc123" $PKG
 
 # App Link verification state per host ("verified" is what you want)

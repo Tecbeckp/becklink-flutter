@@ -1,7 +1,7 @@
 # becklinks_flutter
 
 Deep links, deferred deep links and install attribution for Flutter apps on Android and iOS, with
-[Beck Link](https://becklinks.com).
+[Beck Links](https://becklinks.com).
 
 - **Direct deep links:** Universal Links (iOS) and App Links (Android) on your project's
   `becklinks.com` host open the right screen, on cold and warm start.
@@ -9,7 +9,7 @@ Deep links, deferred deep links and install attribution for Flutter apps on Andr
   linked screen. Android uses the Google Play Install Referrer; iOS uses an opt-in pasteboard token.
   Every match says how it was made (`matchMethod`) and how sure it is (`confidence`).
 - **Attribution and events:** which link brought an install, plus custom events (purchases,
-  sign-ups) with an offline queue, shown in the Beck Link dashboard.
+  sign-ups) with an offline queue, shown in the Beck Links dashboard.
 - **Share links:** create referral and share links from the app.
 - **Privacy first:** no IDFA, no GAID, no device fingerprinting, no tracking prompt. See
   [Privacy](#privacy).
@@ -22,7 +22,7 @@ Deep links, deferred deep links and install attribution for Flutter apps on Andr
 | iOS                | iOS 15 (app deployment target 15.0); Xcode 16 or newer (the plugin compiles in Swift 5.9 language mode) |
 | Android            | Android 6.0 (API 23; app `minSdk` 23 or higher), `compileSdk` 35, Kotlin Gradle plugin 1.8 or AGP 9     |
 | Platforms          | Android and iOS only                                                                                    |
-| Beck Link          | A project with your iOS and/or Android app configured, and its publishable key                          |
+| Beck Links          | A project with your iOS and/or Android app configured, and its publishable key                          |
 | Native code to add | None: the plugin registers itself; you only do the platform setup below                                 |
 
 ## Install
@@ -33,7 +33,7 @@ Add the package from [pub.dev](https://pub.dev/packages/becklinks_flutter):
 flutter pub add becklinks_flutter
 ```
 
-This adds `becklinks_flutter: ^0.3.0` to your `pubspec.yaml`. To try an unreleased change, depend on
+This adds `becklinks_flutter: ^0.3.1` to your `pubspec.yaml`. To try an unreleased change, depend on
 the repository instead:
 
 ```yaml
@@ -46,11 +46,11 @@ dependencies:
 
 ## Quick start (5 minutes)
 
-### 1. In the Beck Link dashboard
+### 1. In the Beck Links dashboard
 
 1. Open your project in the environment you develop against (`test`).
 2. Under **Applications**, enter your iOS app (bundle ID, Apple Team ID, App Store ID) and your
-   Android app (package name, SHA-256 fingerprints, Play Store URL). Beck Link then serves
+   Android app (package name, SHA-256 fingerprints, Play Store URL). Beck Links then serves
    `apple-app-site-association` and `assetlinks.json` on your link hosts.
 3. Note your link hosts (live `{slug}.becklinks.com`, test `{slug}-test.becklinks.com`) and copy the
    publishable key (`pk_test_…` for development, `pk_live_…` for release builds).
@@ -86,7 +86,7 @@ Future<void> main() async {
   // Returns at once; storage, the launch link and network work run in the background.
   await BeckLink.instance.configure(apiKey: 'pk_test_YOUR_KEY');
 
-  // The one place that routes Beck Link links: the link that launched the app, the deferred link
+  // The one place that routes Beck Links links: the link that launched the app, the deferred link
   // after an install, and links opened while the app runs. Each arrives once.
   BeckLink.instance.onLink.listen(routeLink);
 
@@ -188,7 +188,7 @@ time (Flutter turns it on by default from 3.27). In `ios/Runner/Info.plist`:
 ```
 
 **Custom URL scheme (optional).** If you set a custom URI scheme for your iOS app in the dashboard,
-the "Open in app" button of Beck Link's page for in-app browsers uses it
+the "Open in app" button of Beck Links's page for in-app browsers uses it
 (`acmeshop://becklink?url=…`). Register the same scheme in `Info.plist`:
 
 ```xml
@@ -214,7 +214,7 @@ await BeckLink.instance.configure(apiKey: 'pk_live_YOUR_KEY', enablePasteboard: 
 
 What the user sees:
 
-1. They tap a link without the app installed. Beck Link's landing page shows a **Get the app**
+1. They tap a link without the app installed. Beck Links's landing page shows a **Get the app**
    button; tapping it copies a click URL (`https://acme.becklinks.com/_c/{click ID}`) and opens the
    App Store.
 2. They install and open the app. On that first run only, and only when iOS reports that the
@@ -335,7 +335,7 @@ adb shell pm verify-app-links --re-verify com.acme.shop
 - **Offline links.** When the service does not answer within `firstOpenTimeout`, the app still gets
   the link, built on the device: `linkId` is `null`, `data` is empty, and `path` is the link's
   short path (`/abc123`), not its deep-link path. Route such events to a sensible default.
-- **Only Beck Link URLs.** Only URLs of the configured environment's link hosts (and the
+- **Only Beck Links URLs.** Only URLs of the configured environment's link hosts (and the
   custom-scheme form above) arrive on `onLink`. The SDK ignores your own deep links and OAuth
   callbacks, never sends them anywhere, and leaves them to other plugins.
 - **Inactive links.** Links that are expired, disabled, archived or deleted are not delivered; the
@@ -363,7 +363,7 @@ void routeLink(LinkEvent link) {
 
 - `path` already holds the template's in-app route with the id filled in (`/challenge/4521`), so
   an app that routes by `path` needs no change.
-- `resource.id` is the value from the URL, percent-decoded and at most 128 characters. Beck Link
+- `resource.id` is the value from the URL, percent-decoded and at most 128 characters. Beck Links
   checks that it fits the format the template allows (digits, UUID, base64url, …); it does not know
   whether the item exists or the user may see it, so load it through your own API and handle
   "not found".
@@ -386,7 +386,7 @@ SDK work next to it:
 - `Future<bool> BeckLink.instance.handleUri(Uri uri)`: gives the SDK a URI your app received by
   other means (`app_links`, a `go_router` redirect, a push payload, a QR scan). It resolves it like
   a link opened by the system (the same re-engagement call and offline fallback) and delivers one
-  `LinkEvent` on `onLink`. It returns `true` when the URI is a Beck Link URI that the SDK took, and
+  `LinkEvent` on `onLink`. It returns `true` when the URI is a Beck Links URI that the SDK took, and
   `false` otherwise (nothing is sent, stored or logged beyond scheme and host; continue with your
   own handling). It never throws.
 
@@ -398,14 +398,14 @@ Rules that apply to `handleUri`:
   delivered again. The window is in memory (it does not survive a restart).
 - **Early calls are safe.** While the SDK starts, a forwarded URI waits for storage and for the
   launch link, then follows the same order as links opened while the app runs. Before `configure()`
-  at most 16 Beck Link URIs are kept and handled when it runs.
+  at most 16 Beck Links URIs are kept and handled when it runs.
 - **Consent.** As for platform links, a forwarded link is still resolved and delivered while tracking
   is off, without any identifier (`setTrackingEnabled(false)`).
-- **Privacy.** Logs show scheme, host and the short path of Beck Link URLs only, never query values.
+- **Privacy.** Logs show scheme, host and the short path of Beck Links URLs only, never query values.
 
 ### Pattern A: keep platform links on, filter your own listener
 
-The simplest change. The SDK keeps reading links from the system; your listener skips Beck Link
+The simplest change. The SDK keeps reading links from the system; your listener skips Beck Links
 URIs so they are not handled twice:
 
 ```dart
@@ -416,8 +416,8 @@ appLinks.uriLinkStream.listen((uri) {
 });
 ```
 
-Handle the Beck Link links through `onLink`, as in the quick start. For the launch link do not use
-`appLinks.getInitialLink()` for Beck Link URIs: filter it the same way.
+Handle the Beck Links links through `onLink`, as in the quick start. For the launch link do not use
+`appLinks.getInitialLink()` for Beck Links URIs: filter it the same way.
 
 ### Pattern B: you receive every URI, the SDK receives none from the system
 
@@ -433,7 +433,7 @@ await BeckLink.instance.configure(
 final appLinks = AppLinks();
 
 Future<void> onUri(Uri uri) async {
-  if (await BeckLink.instance.handleUri(uri)) return; // a Beck Link URI: the SDK took it
+  if (await BeckLink.instance.handleUri(uri)) return; // a Beck Links URI: the SDK took it
   Get.toNamed(uri.path, parameters: uri.queryParameters); // your own links
 }
 
@@ -460,7 +460,7 @@ only decide whether **Flutter's router** also receives the URL (as the initial r
 route). They have no effect on whether the SDK or `app_links` receive it: native callbacks reach
 both plugins either way.
 
-- **Leave it on** only if your own router can safely receive a Beck Link URL as well. Then the same
+- **Leave it on** only if your own router can safely receive a Beck Links URL as well. Then the same
   URL is seen twice: once by Flutter's router and once by the SDK (or by `app_links` and
   `handleUri`). The router sees a route such as `/summer24`; unless it ignores it, the user sees an
   unknown-route page or a double navigation. Make the router ignore it (GetX: an `unknownRoute`
@@ -614,7 +614,7 @@ The full reference is in the package's dartdoc. Summary:
 | `BeckLink.instance`                                                                       | The SDK                                                                                |
 | `Future<void> configure({required apiKey, logLevel, enablePasteboard, firstOpenTimeout})` | Starts the SDK with a publishable key and returns at once; call it in the main isolate |
 | `Future<LinkEvent?> getInitialLink()`                                                     | The link that opened the app (direct or deferred), or `null`                           |
-| `bool isBeckLinkUri(Uri uri)`                                                             | Whether `uri` is a Beck Link URI of the configured environment (synchronous, offline)  |
+| `bool isBeckLinkUri(Uri uri)`                                                             | Whether `uri` is a Beck Links URI of the configured environment (synchronous, offline)  |
 | `Future<bool> handleUri(Uri uri)`                                                         | Feeds a URI your app received by other means to the SDK; `false` when it is not ours   |
 | `configure(…, handlePlatformLinks: true)`                                                 | `false`: the SDK reads no links from the system; you forward them with `handleUri`     |
 | `Stream<LinkEvent> get onLink`                                                            | Every link, each once; buffered until the first listener                               |
@@ -671,13 +671,13 @@ dashboard's domain diagnostics and Link Tester check the hosted files for you.
 | iOS build fails with Swift Package Manager: `The package product 'becklinks-flutter' requires minimum platform version 15.0 for the iOS platform, but this target supports 13.0`                           | The Runner target's deployment target is below 15.0                                                                                 | Set **Minimum Deployments** iOS 15.0 on the Runner target, then run `flutter build ios --config-only`                                                        |
 | iOS: the link opens Safari or the App Store, not the app                                                                                                                                                  | Wrong Apple Team ID or bundle ID in the dashboard, or the Associated Domains entitlement is missing from this build                 | Fix the iOS app settings in the dashboard; check the entitlement in Release builds and the capability of your App ID                                         |
 | iOS: a link typed or pasted into Safari's address bar opens the website                                                                                                                                   | By design: iOS opens apps only for tapped links                                                                                     | Tap the link in Notes or Messages instead                                                                                                                    |
-| iOS: tapping a link on a web page of the same host opens the website                                                                                                                                      | By design: iOS ignores Universal Links within the same domain                                                                       | Link from another domain; Beck Link's landing page offers an "Open in app" button                                                                            |
+| iOS: tapping a link on a web page of the same host opens the website                                                                                                                                      | By design: iOS ignores Universal Links within the same domain                                                                       | Link from another domain; Beck Links's landing page offers an "Open in app" button                                                                            |
 | iOS: links stopped opening the app on one device                                                                                                                                                          | The user once chose to open such a link in Safari, which iOS remembers                                                              | Long-press the link and choose to open it in the app, or tap **Open** in Safari's app banner                                                                 |
 | iOS: a changed app setting has no effect yet                                                                                                                                                              | Apple's CDN still serves the old `apple-app-site-association`                                                                       | Wait (it can take hours); compare with `curl https://app-site-association.cdn-apple.com/a/v1/acme.becklinks.com`; use `?mode=developer` in development builds |
 | Android: the link opens the browser (Android 12+) or a chooser (Android 6–11)                                                                                                                             | `assetlinks.json` lacks the SHA-256 of the installed build, often because only the upload key is registered                         | Add the Play App Signing (and debug) SHA-256 in the dashboard, reinstall, run `adb shell pm verify-app-links --re-verify com.acme.shop`                      |
 | Android 6–11: debug builds open links, release builds do not                                                                                                                                              | The test host is declared, but its environment lacks the release certificate (all hosts verify together)                            | Add the certificate to the test environment, or declare the test host only in the debug manifest                                                             |
 | The app opens but shows Flutter's "page not found", or navigates twice                                                                                                                                    | Flutter's own deep linking is still on (the default since Flutter 3.27)                                                             | Set `FlutterDeepLinkingEnabled` to `NO` (iOS) and `flutter_deeplinking_enabled` to `false` (Android)                                                         |
-| The link stays in the in-app browser of Instagram, Facebook, TikTok or Gmail                                                                                                                              | These browsers do not hand links to apps                                                                                            | Expected: Beck Link shows an "Open in app" page there. Set a custom scheme in the dashboard and the app so its button can open the app                       |
+| The link stays in the in-app browser of Instagram, Facebook, TikTok or Gmail                                                                                                                              | These browsers do not hand links to apps                                                                                            | Expected: Beck Links shows an "Open in app" page there. Set a custom scheme in the dashboard and the app so its button can open the app                       |
 | The app opens but `onLink` gets nothing; log "Ignored a link of the … environment"                                                                                                                        | A test link with a live key, or the reverse                                                                                         | Use links and the publishable key of the same environment                                                                                                    |
 | The app opens but `onLink` gets nothing; log "The link is not active…"                                                                                                                                    | The link is expired, disabled, archived or deleted                                                                                  | Reactivate it or use another link; keep a default screen for this case                                                                                       |
 | `linkId` is `null`, `data` is empty and `path` is the short path                                                                                                                                          | The service did not answer within `firstOpenTimeout`, or the device was offline                                                     | Check connectivity; raise `firstOpenTimeout` on slow networks; route unknown paths to a default screen                                                       |
@@ -686,7 +686,7 @@ dashboard's domain diagnostics and Link Tester check the hosted files for you.
 | No deferred link, but `onAttribution` later reports `attributed`                                                                                                                                          | The first-open answer arrived after `firstOpenTimeout`                                                                              | Raise `firstOpenTimeout` (at most 30 seconds) or check the network                                                                                           |
 | No deferred link after the user accepted tracking                                                                                                                                                         | Tracking was off at the first launch and was turned on after the first screen appeared                                              | Known limitation; see [Consent](#consent)                                                                                                                    |
 | `configure()` throws `invalid_key`                                                                                                                                                                        | A secret key (`sk_…`) or a malformed key                                                                                            | Use the publishable key (`pk_test_…` or `pk_live_…`) from the dashboard                                                                                      |
-| Log "The Beck Link API refused the API key"; nothing is sent                                                                                                                                              | The key is unknown or revoked; the SDK stops sending until the app restarts or `configure()` gets another key                       | Ship the current publishable key; queued events are kept                                                                                                     |
+| Log "The Beck Links API refused the API key"; nothing is sent                                                                                                                                              | The key is unknown or revoked; the SDK stops sending until the app restarts or `configure()` gets another key                       | Ship the current publishable key; queued events are kept                                                                                                     |
 | `createLink()` throws `rate_limited`, or the log says sending was rate limited                                                                                                                            | Too many requests from this install                                                                                                 | Wait `BeckLinkException.retryAfter`; queued events are sent again automatically                                                                              |
 | iOS on Flutter 3.27–3.37: no links at all                                                                                                                                                                 | The app adopted the UIScene life cycle, whose events plugins only get from Flutter 3.38                                             | Keep the app-delegate life cycle on these Flutter versions, or upgrade Flutter                                                                               |
 
@@ -715,7 +715,7 @@ curl -i https://acme.becklinks.com/.well-known/assetlinks.json
 - **Main isolate only:** call `configure()` in the app's main isolate. In background isolates and
   headless engines (for example push-messaging handlers) the SDK reads no launch link and registers
   no install.
-- **Only Beck Link URLs:** the SDK reports Beck Link URLs only. Your app's other deep links need
+- **Only Beck Links URLs:** the SDK reports Beck Links URLs only. Your app's other deep links need
   their own handling (for example `app_links`), which can live next to the SDK: see
   [Apps that already handle deep links](#apps-that-already-handle-deep-links-app_links-go_router-getx)
   (`isBeckLinkUri`, `handleUri`, `handlePlatformLinks`). Forwarded URIs are deduplicated for

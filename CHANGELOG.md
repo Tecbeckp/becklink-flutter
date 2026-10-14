@@ -4,6 +4,13 @@ All notable changes to `becklinks_flutter` (called `becklink_flutter` up to 0.2.
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
 
+## 0.3.1 (2026-10-14)
+
+### Changed
+
+- Documentation only: the product is called **Beck Links** in the README, the privacy document and the
+  package description. No code change.
+
 ## 0.3.0 (2026-10-14)
 
 ### Changed

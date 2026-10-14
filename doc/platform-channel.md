@@ -45,7 +45,7 @@ both sides and `MethodChannelBeckLinkPlatform`.
 | `received_at_ms` | Int    | Device clock (ms since the Unix epoch) when the native layer got the URL from the OS         |
 
 Report every `VIEW` / `openURL` / `NSUserActivityTypeBrowsingWeb` URL, whatever its host or scheme;
-Dart decides which ones are Beck Link URLs (contract section 9.1) and never sends the others
+Dart decides which ones are Beck Links URLs (contract section 9.1) and never sends the others
 anywhere. `received_at_ms` is the direct open's `opened_at` and, with `url`, identifies one
 delivery for Dart's link dedupe, so stamp each delivery once and keep that stamp.
 

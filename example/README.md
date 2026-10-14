@@ -1,4 +1,4 @@
-# becklinks_flutter example: Beck Link Debug
+# becklinks_flutter example: Beck Links Debug
 
 A go_router app that shows the whole `becklinks_flutter` integration (direct and deferred deep
 links, attribution, events, share and referral links, tracking consent) and doubles as a
