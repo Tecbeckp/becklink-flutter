@@ -1,6 +1,6 @@
-# becklink_flutter example: Beck Link Debug
+# becklinks_flutter example: Beck Link Debug
 
-A go_router app that shows the whole `becklink_flutter` integration (direct and deferred deep
+A go_router app that shows the whole `becklinks_flutter` integration (direct and deferred deep
 links, attribution, events, share and referral links, tracking consent) and doubles as a
 **debugging app** to install on a real phone and check the whole deep-link flow against a Beck
 Link server: production, or your local stack. **[DEBUGGING.md](DEBUGGING.md)** is the step-by-step
@@ -21,7 +21,7 @@ copy it into an older app.
 
 ## Setup in short
 
-1. Dashboard (test environment): Android package `app.becklink.becklink_flutter_example` with
+1. Dashboard (test environment): Android package `app.becklink.becklinks_flutter_example` with
    your debug keystore's SHA-256, iOS bundle ID `app.becklink.becklinkFlutterExample` with your
    Team ID, custom URI scheme `becklinkdebug` for both.
 2. Replace `REPLACE_WITH_YOUR_LINK_HOST` with your link host in
@@ -87,7 +87,7 @@ Run from the repository root:
   `app.becklink.flutter/links` channel; the file's header explains what it checks and where it stops.
 - **Android native** (`android/src/test/kotlin/`, JUnit on the JVM): build the example once
   (`flutter build apk --debug`), then in `example/android` run
-  `./gradlew :becklink_flutter:testDebugUnitTest`.
+  `./gradlew :becklinks_flutter:testDebugUnitTest`.
 - **iOS native** (`example/ios/RunnerTests/`, XCTest, macOS only): `flutter build ios --config-only` in
   `example`, then `xcodebuild test -workspace ios/Runner.xcworkspace -scheme Runner -destination
   'platform=iOS Simulator,name=iPhone 16'`.

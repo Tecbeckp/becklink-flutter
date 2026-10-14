@@ -24,7 +24,7 @@ The app's identifiers:
 
 | Platform | Identifier                                                                     |
 | -------- | ------------------------------------------------------------------------------ |
-| Android  | package `app.becklink.becklink_flutter_example`                                |
+| Android  | package `app.becklink.becklinks_flutter_example`                                |
 | iOS      | bundle ID `app.becklink.becklinkFlutterExample` (change it in Xcode if needed) |
 | Both     | custom URI scheme `becklinkdebug`                                              |
 
@@ -133,7 +133,7 @@ From outside the app, as the system would deliver it (cold start: app closed; wa
 the background):
 
 ```powershell
-$PKG = "app.becklink.becklink_flutter_example"
+$PKG = "app.becklink.becklinks_flutter_example"
 
 # App Link (opens the app only when the host is verified, otherwise the browser)
 adb shell am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://myshop-test.becklinks.com/abc123" $PKG
@@ -180,7 +180,7 @@ the app, click your link on the phone, install from Play, and open the app: Firs
 The old broadcast still appears in many guides:
 
 ```powershell
-adb shell am broadcast -a com.android.vending.INSTALL_REFERRER -n app.becklink.becklink_flutter_example/<receiver> --es "referrer" "click_id%3D01J0000000000000000000000"
+adb shell am broadcast -a com.android.vending.INSTALL_REFERRER -n app.becklink.becklinks_flutter_example/<receiver> --es "referrer" "click_id%3D01J0000000000000000000000"
 ```
 
 It only reaches an app that declares an `INSTALL_REFERRER` broadcast receiver; the Play Install

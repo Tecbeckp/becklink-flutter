@@ -1,4 +1,4 @@
-# becklink_flutter
+# becklinks_flutter
 
 Deep links, deferred deep links and install attribution for Flutter apps on Android and iOS, with
 [Beck Link](https://becklinks.com).
@@ -27,20 +27,20 @@ Deep links, deferred deep links and install attribution for Flutter apps on Andr
 
 ## Install
 
-Add the package from [pub.dev](https://pub.dev/packages/becklink_flutter):
+Add the package from [pub.dev](https://pub.dev/packages/becklinks_flutter):
 
 ```sh
-flutter pub add becklink_flutter
+flutter pub add becklinks_flutter
 ```
 
-This adds `becklink_flutter: ^0.2.0` to your `pubspec.yaml`. To try an unreleased change, depend on
+This adds `becklinks_flutter: ^0.3.0` to your `pubspec.yaml`. To try an unreleased change, depend on
 the repository instead:
 
 ```yaml
 dependencies:
-  becklink_flutter:
+  becklinks_flutter:
     git:
-      url: https://github.com/Tecbeckp/becklink-flutter.git
+      url: https://github.com/Tecbeckp/becklinks-flutter.git
       ref: main
 ```
 
@@ -67,7 +67,7 @@ the `autoVerify` intent filter and `flutter_deeplinking_enabled = false` on Andr
 ### 3. Configure the SDK and route links in one place
 
 ```dart
-import 'package:becklink_flutter/becklink_flutter.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -666,9 +666,9 @@ dashboard's domain diagnostics and Link Tester check the hosted files for you.
 
 | Symptom                                                                                                                                                                                                   | Cause                                                                                                                               | Fix                                                                                                                                                          |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Android build fails: `uses-sdk:minSdkVersion 21 cannot be smaller than version 23 declared in library [:becklink_flutter]` (Flutter: "The plugin becklink_flutter requires a higher Android SDK version") | The app's `minSdk` is below 23 (`flutter.minSdkVersion` is 21 on Flutter 3.27)                                                      | Set `minSdk = 23` in `android/app/build.gradle` (or `.kts`); see [Android](#android)                                                                         |
-| iOS build fails in `pod install`: "… required a higher minimum deployment target" (Flutter: `The plugin "becklink_flutter" requires a higher minimum iOS deployment version`)                             | The Podfile's `platform :ios` (or, without one, the Runner target's deployment target) is below 15.0                                | Set `platform :ios, '15.0'` in `ios/Podfile` and **Minimum Deployments** iOS 15.0 on the Runner target; see [iOS](#ios)                                      |
-| iOS build fails with Swift Package Manager: `The package product 'becklink-flutter' requires minimum platform version 15.0 for the iOS platform, but this target supports 13.0`                           | The Runner target's deployment target is below 15.0                                                                                 | Set **Minimum Deployments** iOS 15.0 on the Runner target, then run `flutter build ios --config-only`                                                        |
+| Android build fails: `uses-sdk:minSdkVersion 21 cannot be smaller than version 23 declared in library [:becklinks_flutter]` (Flutter: "The plugin becklinks_flutter requires a higher Android SDK version") | The app's `minSdk` is below 23 (`flutter.minSdkVersion` is 21 on Flutter 3.27)                                                      | Set `minSdk = 23` in `android/app/build.gradle` (or `.kts`); see [Android](#android)                                                                         |
+| iOS build fails in `pod install`: "… required a higher minimum deployment target" (Flutter: `The plugin "becklinks_flutter" requires a higher minimum iOS deployment version`)                             | The Podfile's `platform :ios` (or, without one, the Runner target's deployment target) is below 15.0                                | Set `platform :ios, '15.0'` in `ios/Podfile` and **Minimum Deployments** iOS 15.0 on the Runner target; see [iOS](#ios)                                      |
+| iOS build fails with Swift Package Manager: `The package product 'becklinks-flutter' requires minimum platform version 15.0 for the iOS platform, but this target supports 13.0`                           | The Runner target's deployment target is below 15.0                                                                                 | Set **Minimum Deployments** iOS 15.0 on the Runner target, then run `flutter build ios --config-only`                                                        |
 | iOS: the link opens Safari or the App Store, not the app                                                                                                                                                  | Wrong Apple Team ID or bundle ID in the dashboard, or the Associated Domains entitlement is missing from this build                 | Fix the iOS app settings in the dashboard; check the entitlement in Release builds and the capability of your App ID                                         |
 | iOS: a link typed or pasted into Safari's address bar opens the website                                                                                                                                   | By design: iOS opens apps only for tapped links                                                                                     | Tap the link in Notes or Messages instead                                                                                                                    |
 | iOS: tapping a link on a web page of the same host opens the website                                                                                                                                      | By design: iOS ignores Universal Links within the same domain                                                                       | Link from another domain; Beck Link's landing page offers an "Open in app" button                                                                            |
@@ -766,7 +766,7 @@ One-time setup:
 1. Done: 0.1.0 was published by hand (`flutter pub publish` in the repository root), because pub.dev automates
    only packages that already exist.
 2. On pub.dev, open the package's **Admin** tab → **Automated publishing** → **Enable publishing
-   from GitHub Actions**, with repository `Tecbeckp/becklink-flutter` and tag pattern
+   from GitHub Actions**, with repository `Tecbeckp/becklinks-flutter` and tag pattern
    `v{{version}}`. Turn on **Require GitHub Actions environment** with the environment
    `pub.dev`.
 3. On GitHub, create the environment `pub.dev` (**Settings** → **Environments**) with required

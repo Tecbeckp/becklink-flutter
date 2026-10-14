@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io' show FileSystemException;
 import 'dart:math';
 
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
-import 'package:becklink_flutter/src/models/remote_config.dart';
-import 'package:becklink_flutter/src/storage/first_open_record.dart';
-import 'package:becklink_flutter/src/storage/memory_storage_directory.dart';
-import 'package:becklink_flutter/src/storage/sdk_state_store.dart';
-import 'package:becklink_flutter/src/storage/storage_directory.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/models/remote_config.dart';
+import 'package:becklinks_flutter/src/storage/first_open_record.dart';
+import 'package:becklinks_flutter/src/storage/memory_storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/sdk_state_store.dart';
+import 'package:becklinks_flutter/src/storage/storage_directory.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

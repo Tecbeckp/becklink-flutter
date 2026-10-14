@@ -1,4 +1,4 @@
-# R8 rules merged into every app that uses becklink_flutter.
+# R8 rules merged into every app that uses becklinks_flutter.
 
 # Flutter creates the plugin from GeneratedPluginRegistrant, which the embedding loads by
 # reflection; keep the entry point so release builds can always register it.

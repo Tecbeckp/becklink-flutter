@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:becklink_flutter/src/becklink.dart';
-import 'package:becklink_flutter/src/http/retry_policy.dart';
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
-import 'package:becklink_flutter/src/storage/event_queue.dart';
-import 'package:becklink_flutter/src/storage/file_storage_directory.dart';
-import 'package:becklink_flutter/src/storage/sdk_state_store.dart';
+import 'package:becklinks_flutter/src/becklink.dart';
+import 'package:becklinks_flutter/src/http/retry_policy.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/storage/event_queue.dart';
+import 'package:becklinks_flutter/src/storage/file_storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/sdk_state_store.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:flutter_test/flutter_test.dart';
 

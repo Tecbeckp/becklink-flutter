@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:becklink_flutter/src/util/async_lock.dart';
-import 'package:becklink_flutter/src/util/fnv1a.dart';
-import 'package:becklink_flutter/src/util/single_line.dart';
-import 'package:becklink_flutter/src/util/uuid.dart';
+import 'package:becklinks_flutter/src/util/async_lock.dart';
+import 'package:becklinks_flutter/src/util/fnv1a.dart';
+import 'package:becklinks_flutter/src/util/single_line.dart';
+import 'package:becklinks_flutter/src/util/uuid.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_support.dart';

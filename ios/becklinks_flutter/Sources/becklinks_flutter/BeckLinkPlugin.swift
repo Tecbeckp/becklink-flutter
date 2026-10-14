@@ -1,7 +1,7 @@
 import Flutter
 import UIKit
 
-/// iOS entry point of the becklink_flutter plugin; the wire contract is `doc/platform-channel.md`.
+/// iOS entry point of the becklinks_flutter plugin; the wire contract is `doc/platform-channel.md`.
 ///
 /// Deliberately thin: the Dart layer owns networking, storage and attribution, so this class only
 /// does what Dart cannot reach on iOS: incoming links, the storage folder, the Keychain install ID

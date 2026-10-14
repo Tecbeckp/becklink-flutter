@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Checks that the release metadata of becklink_flutter (the repository root) agrees with itself:
+# Checks that the release metadata of becklinks_flutter (the repository root) agrees with itself:
 #   - `version` in pubspec.yaml equals `sdkVersion` in lib/src/sdk_info.dart. The SDK sends that
 #     value as X-SDK-Version and the server picks the enum values it may send by it (contract
 #     section 13), so a stale value could deliver values this SDK version does not know;
@@ -73,7 +73,7 @@ if [ -n "$tag" ]; then
   fi
 fi
 
-echo "becklink_flutter $version: pubspec.yaml, sdk_info.dart and CHANGELOG.md agree."
+echo "becklinks_flutter $version: pubspec.yaml, sdk_info.dart and CHANGELOG.md agree."
 if [ -n "$tag" ]; then
   echo "Tag $tag matches."
 fi

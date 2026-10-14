@@ -1,5 +1,5 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter/src/platform/platform_link.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter/src/platform/platform_link.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleState;
 import 'package:flutter_test/flutter_test.dart';
 

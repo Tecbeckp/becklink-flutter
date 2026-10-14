@@ -1,4 +1,4 @@
-import 'package:becklink_flutter/src/core/buffered_broadcast.dart';
+import 'package:becklinks_flutter/src/core/buffered_broadcast.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_support.dart';

@@ -1,5 +1,5 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter/src/json/malformed_json_exception.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter/src/json/malformed_json_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/fixtures.dart';

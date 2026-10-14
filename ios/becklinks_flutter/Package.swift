@@ -4,19 +4,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "becklink_flutter",
+    name: "becklinks_flutter",
     platforms: [
         .iOS("15.0")
     ],
     products: [
-        .library(name: "becklink-flutter", targets: ["becklink_flutter"])
+        .library(name: "becklinks-flutter", targets: ["becklinks_flutter"])
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework")
     ],
     targets: [
         .target(
-            name: "becklink_flutter",
+            name: "becklinks_flutter",
             dependencies: [
                 .product(name: "FlutterFramework", package: "FlutterFramework")
             ],

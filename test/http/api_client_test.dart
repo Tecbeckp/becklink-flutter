@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io' show HttpDate, gzip;
 
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter/src/http/api_client.dart';
-import 'package:becklink_flutter/src/http/api_client_closed_exception.dart';
-import 'package:becklink_flutter/src/http/api_endpoint.dart';
-import 'package:becklink_flutter/src/http/api_response.dart';
-import 'package:becklink_flutter/src/http/retry_policy.dart';
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/remote_config.dart';
-import 'package:becklink_flutter/src/sdk_info.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter/src/http/api_client.dart';
+import 'package:becklinks_flutter/src/http/api_client_closed_exception.dart';
+import 'package:becklinks_flutter/src/http/api_endpoint.dart';
+import 'package:becklinks_flutter/src/http/api_response.dart';
+import 'package:becklinks_flutter/src/http/retry_policy.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/remote_config.dart';
+import 'package:becklinks_flutter/src/sdk_info.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -156,9 +156,10 @@ void main() {
         );
         expect(
           request.headers,
-          containsPair('user-agent', 'becklink_flutter/$sdkVersion'),
+          containsPair('user-agent', 'becklinks_flutter/$sdkVersion'),
         );
-        expect(request.headers, containsPair('x-sdk-name', 'becklink_flutter'));
+        expect(
+            request.headers, containsPair('x-sdk-name', 'becklinks_flutter'));
         expect(request.headers, containsPair('x-sdk-version', sdkVersion));
         expect(request.headers.keys, isNot(contains('idempotency-key')));
         expect(request.headers.keys, isNot(contains('content-encoding')));

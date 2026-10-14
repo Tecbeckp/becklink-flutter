@@ -23,11 +23,11 @@
 
 import 'dart:async';
 
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter_example/src/app.dart';
-import 'package:becklink_flutter_example/src/demo_state.dart';
-import 'package:becklink_flutter_example/src/sdk_log_buffer.dart';
-import 'package:becklink_flutter_example/src/sdk_setup.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter_example/src/app.dart';
+import 'package:becklinks_flutter_example/src/demo_state.dart';
+import 'package:becklinks_flutter_example/src/sdk_log_buffer.dart';
+import 'package:becklinks_flutter_example/src/sdk_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

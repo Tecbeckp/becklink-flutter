@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:becklink_flutter/src/storage/file_storage_directory.dart';
-import 'package:becklink_flutter/src/storage/memory_storage_directory.dart';
-import 'package:becklink_flutter/src/storage/storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/file_storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/memory_storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/storage_directory.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

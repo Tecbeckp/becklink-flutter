@@ -1,6 +1,6 @@
 name: Flutter SDK publish
 
-# Publishes becklink_flutter (repository root) to pub.dev when a `v<version>` tag is
+# Publishes becklinks_flutter (repository root) to pub.dev when a `v<version>` tag is
 # pushed (Phase 7 T13). Uses pub.dev automated publishing: GitHub's short-lived OIDC token, no
 # stored pub.dev credential. One-time setup and the release steps: README.md,
 # "Releasing". The steps follow dart-lang/setup-dart's reusable publish workflow; it is not called

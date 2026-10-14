@@ -1,4 +1,4 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/fixtures.dart';

@@ -1,6 +1,6 @@
-import 'package:becklink_flutter/src/logging/redact_secrets.dart';
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/logging/redact_secrets.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_support.dart';

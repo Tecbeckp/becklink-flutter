@@ -1,8 +1,29 @@
 # Changelog
 
-All notable changes to `becklink_flutter` are documented here. The format follows
+All notable changes to `becklinks_flutter` (called `becklink_flutter` up to 0.2.0) are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
+
+## 0.3.0 (2026-10-14)
+
+### Changed
+
+- **The package is now called `becklinks_flutter`**, to match the domain becklinks.com. The API is the
+  same: only the package name and the import change.
+
+  ```yaml
+  dependencies:
+    becklinks_flutter: ^0.3.0
+  ```
+
+  ```dart
+  import 'package:becklinks_flutter/becklinks_flutter.dart';
+  ```
+
+- `becklink_flutter` 0.2.1 is a small wrapper that re-exports this package, so an app that still
+  imports `package:becklink_flutter/becklink_flutter.dart` keeps working after `flutter pub upgrade`.
+  It is discontinued; move to the new name when convenient.
+- On iOS the pod and the Swift package are now called `becklinks_flutter`.
 
 ## 0.2.0 (2026-10-12)
 

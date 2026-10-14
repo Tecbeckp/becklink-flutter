@@ -2,7 +2,7 @@ import Flutter
 import Security
 import XCTest
 
-@testable import becklink_flutter
+@testable import becklinks_flutter
 
 // Native unit tests of the plugin's Swift layer run inside the example app's test target. They
 // cover the pure parts; the pasteboard and the Keychain themselves need a device and a user.

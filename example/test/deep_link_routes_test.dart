@@ -1,4 +1,4 @@
-import 'package:becklink_flutter_example/src/deep_link_routes.dart';
+import 'package:becklinks_flutter_example/src/deep_link_routes.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

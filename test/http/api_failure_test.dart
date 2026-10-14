@@ -1,6 +1,6 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter/src/http/api_failure.dart';
-import 'package:becklink_flutter/src/http/api_problem.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter/src/http/api_failure.dart';
+import 'package:becklinks_flutter/src/http/api_problem.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

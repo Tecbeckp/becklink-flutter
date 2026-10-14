@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:becklink_flutter/src/platform/becklink_platform.dart';
-import 'package:becklink_flutter/src/platform/device_context.dart';
-import 'package:becklink_flutter/src/platform/install_id_seed_result.dart';
-import 'package:becklink_flutter/src/platform/install_referrer_result.dart';
-import 'package:becklink_flutter/src/platform/platform_link.dart';
+import 'package:becklinks_flutter/src/platform/becklink_platform.dart';
+import 'package:becklinks_flutter/src/platform/device_context.dart';
+import 'package:becklinks_flutter/src/platform/install_id_seed_result.dart';
+import 'package:becklinks_flutter/src/platform/install_referrer_result.dart';
+import 'package:becklinks_flutter/src/platform/platform_link.dart';
 
 /// The native layers of one app process, as the SDK sees them through
 /// `BeckLinkPlatform`, with the behaviour `doc/platform-channel.md`

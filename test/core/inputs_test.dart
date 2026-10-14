@@ -1,7 +1,7 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
-import 'package:becklink_flutter/src/core/event_input.dart';
-import 'package:becklink_flutter/src/core/sdk_options.dart';
-import 'package:becklink_flutter/src/core/user_id.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
+import 'package:becklinks_flutter/src/core/event_input.dart';
+import 'package:becklinks_flutter/src/core/sdk_options.dart';
+import 'package:becklinks_flutter/src/core/user_id.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/fixtures.dart';

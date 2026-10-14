@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
-import 'package:becklink_flutter/src/storage/event_batch_outcome.dart';
-import 'package:becklink_flutter/src/storage/event_queue.dart';
-import 'package:becklink_flutter/src/storage/memory_storage_directory.dart';
-import 'package:becklink_flutter/src/storage/queued_event.dart';
-import 'package:becklink_flutter/src/storage/storage_directory.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/storage/event_batch_outcome.dart';
+import 'package:becklinks_flutter/src/storage/event_queue.dart';
+import 'package:becklinks_flutter/src/storage/memory_storage_directory.dart';
+import 'package:becklinks_flutter/src/storage/queued_event.dart';
+import 'package:becklinks_flutter/src/storage/storage_directory.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_support.dart';

@@ -1,4 +1,4 @@
-import 'package:becklink_flutter/becklink_flutter.dart';
+import 'package:becklinks_flutter/becklinks_flutter.dart';
 import 'package:flutter/foundation.dart';
 
 /// What the debug app was told to connect to, entered on the Configure

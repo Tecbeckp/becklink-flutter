@@ -309,7 +309,7 @@ final class MethodChannelBeckLinkPlatform implements BeckLinkPlatform {
     if (_missingPluginReported) return;
     _missingPluginReported = true;
     _logger.error(
-      'The becklink_flutter native plugin is not registered in this Flutter '
+      'The becklinks_flutter native plugin is not registered in this Flutter '
       'engine: incoming links, storage, install referrer, pasteboard, '
       'Keychain and device details are unavailable',
     );

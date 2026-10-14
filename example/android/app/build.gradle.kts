@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "app.becklink.becklink_flutter_example"
+    namespace = "app.becklink.becklinks_flutter_example"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "app.becklink.becklink_flutter_example"
+        applicationId = "app.becklink.becklinks_flutter_example"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

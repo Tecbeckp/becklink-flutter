@@ -1,6 +1,6 @@
 import 'dart:io' show HttpDate;
 
-import 'package:becklink_flutter/src/http/retry_policy.dart';
+import 'package:becklinks_flutter/src/http/retry_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/test_support.dart';

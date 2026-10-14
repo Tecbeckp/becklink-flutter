@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:becklink_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleState;
 import 'package:flutter_test/flutter_test.dart';

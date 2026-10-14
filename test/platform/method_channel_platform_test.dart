@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
-import 'package:becklink_flutter/src/platform/device_context.dart';
-import 'package:becklink_flutter/src/platform/install_id_seed_result.dart';
-import 'package:becklink_flutter/src/platform/install_referrer_result.dart';
-import 'package:becklink_flutter/src/platform/method_channel_becklink_platform.dart';
-import 'package:becklink_flutter/src/platform/platform_link.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/platform/device_context.dart';
+import 'package:becklinks_flutter/src/platform/install_id_seed_result.dart';
+import 'package:becklinks_flutter/src/platform/install_referrer_result.dart';
+import 'package:becklinks_flutter/src/platform/method_channel_becklink_platform.dart';
+import 'package:becklinks_flutter/src/platform/platform_link.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

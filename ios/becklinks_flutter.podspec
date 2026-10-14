@@ -1,10 +1,10 @@
 #
 # CocoaPods integration for apps that have not switched to Swift Package Manager.
-# Validate with `pod lib lint becklink_flutter.podspec` before publishing.
+# Validate with `pod lib lint becklinks_flutter.podspec` before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'becklink_flutter'
-  s.version          = '0.2.0'
+  s.name             = 'becklinks_flutter'
+  s.version          = '0.3.0'
   s.summary          = 'Deep links, deferred deep links and attribution for Flutter apps with Beck Link.'
   s.description      = <<-DESC
 Deep links, deferred deep links and attribution for Flutter apps with Beck Link.
@@ -13,7 +13,7 @@ Deep links, deferred deep links and attribution for Flutter apps with Beck Link.
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = 'Beck Link'
   s.source           = { :path => '.' }
-  s.source_files     = 'becklink_flutter/Sources/becklink_flutter/**/*.swift'
+  s.source_files     = 'becklinks_flutter/Sources/becklinks_flutter/**/*.swift'
   s.dependency 'Flutter'
   s.platform         = :ios, '15.0'
 
@@ -22,5 +22,5 @@ Deep links, deferred deep links and attribution for Flutter apps with Beck Link.
   s.swift_version = '5.9'
 
   # Apple requires SDKs to ship their own privacy manifest.
-  s.resource_bundles = { 'becklink_flutter_privacy' => ['becklink_flutter/Sources/becklink_flutter/PrivacyInfo.xcprivacy'] }
+  s.resource_bundles = { 'becklinks_flutter_privacy' => ['becklinks_flutter/Sources/becklinks_flutter/PrivacyInfo.xcprivacy'] }
 end

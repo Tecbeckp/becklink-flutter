@@ -1,6 +1,6 @@
 # Privacy and data disclosure
 
-What `becklink_flutter` collects, sends and stores, so you can fill in Apple's App Privacy details
+What `becklinks_flutter` collects, sends and stores, so you can fill in Apple's App Privacy details
 and Google Play's Data safety form. Beck Link processes this data on your behalf; you decide what
 your app discloses. This page describes the SDK's behaviour and is not legal advice.
 
@@ -28,7 +28,7 @@ All requests go to `https://api.becklinks.com` over HTTPS (TLS 1.2 or newer).
 | Item                                        | Content                                                                                                    |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `Authorization`                             | Your publishable key (`pk_test_…` or `pk_live_…`), which is public by design                               |
-| `X-SDK-Name`, `X-SDK-Version`, `User-Agent` | `becklink_flutter` and its version; no device information                                                  |
+| `X-SDK-Name`, `X-SDK-Version`, `User-Agent` | `becklinks_flutter` and its version; no device information                                                  |
 | IP address                                  | Part of every connection. Used in memory for rate limiting and to look up country and region; never stored |
 
 ### Device context
@@ -103,7 +103,7 @@ tracking on again starts a new install with a new ID.
 
 ### PrivacyInfo.xcprivacy
 
-The plugin ships this privacy manifest (CocoaPods resource bundle `becklink_flutter_privacy`, or the
+The plugin ships this privacy manifest (CocoaPods resource bundle `becklinks_flutter_privacy`, or the
 Swift package's resources). Xcode's privacy report (**Product → Archive**, then **Generate Privacy
 Report** in the Organizer) includes it.
 

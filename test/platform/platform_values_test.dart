@@ -1,6 +1,6 @@
-import 'package:becklink_flutter/src/platform/native_time.dart';
-import 'package:becklink_flutter/src/platform/pasteboard_click_url.dart';
-import 'package:becklink_flutter/src/platform/platform_link.dart';
+import 'package:becklinks_flutter/src/platform/native_time.dart';
+import 'package:becklinks_flutter/src/platform/pasteboard_click_url.dart';
+import 'package:becklinks_flutter/src/platform/platform_link.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/fixtures.dart';

@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 
 /**
- * Android entry point of the becklink_flutter plugin; implements the wire contract in
+ * Android entry point of the becklinks_flutter plugin; implements the wire contract in
  * `doc/platform-channel.md`.
  *
  * Deliberately thin: the Dart layer owns networking, storage and attribution, so this class only

@@ -1,6 +1,6 @@
-import 'package:becklink_flutter/src/json/json_reader.dart';
-import 'package:becklink_flutter/src/json/malformed_json_exception.dart';
-import 'package:becklink_flutter/src/storage/seen_links.dart';
+import 'package:becklinks_flutter/src/json/json_reader.dart';
+import 'package:becklinks_flutter/src/json/malformed_json_exception.dart';
+import 'package:becklinks_flutter/src/storage/seen_links.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

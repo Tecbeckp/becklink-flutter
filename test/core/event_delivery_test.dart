@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:becklink_flutter/src/core/event_delivery.dart';
-import 'package:becklink_flutter/src/http/api_client.dart';
-import 'package:becklink_flutter/src/http/retry_policy.dart';
-import 'package:becklink_flutter/src/logging/sdk_logger.dart';
-import 'package:becklink_flutter/src/models/log_level.dart';
-import 'package:becklink_flutter/src/storage/event_queue.dart';
-import 'package:becklink_flutter/src/storage/memory_storage_directory.dart';
+import 'package:becklinks_flutter/src/core/event_delivery.dart';
+import 'package:becklinks_flutter/src/http/api_client.dart';
+import 'package:becklinks_flutter/src/http/retry_policy.dart';
+import 'package:becklinks_flutter/src/logging/sdk_logger.dart';
+import 'package:becklinks_flutter/src/models/log_level.dart';
+import 'package:becklinks_flutter/src/storage/event_queue.dart';
+import 'package:becklinks_flutter/src/storage/memory_storage_directory.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 

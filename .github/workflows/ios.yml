@@ -1,6 +1,6 @@
 name: Flutter SDK iOS
 
-# The iOS builds of the becklink_flutter plugin (repository root), on macOS runners. GitHub counts
+# The iOS builds of the becklinks_flutter plugin (repository root), on macOS runners. GitHub counts
 # every macOS minute of a private repository 10 times against the free Actions minutes, so these
 # jobs never run on pull requests or pushes (owner: no paid CI). Two callers only:
 # - ci.yml, when started by hand (Actions → Flutter SDK → Run workflow);
@@ -92,13 +92,13 @@ jobs:
       - name: Plugin came in through CocoaPods
         if: matrix.compat-app
         working-directory: ${{ env.APP_DIR }}
-        run: grep -q 'becklink_flutter' ios/Podfile.lock
+        run: grep -q 'becklinks_flutter' ios/Podfile.lock
 
       - name: Plugin came in through Swift Package Manager
         if: ${{ !matrix.compat-app }}
         working-directory: ${{ env.APP_DIR }}
         run: |
-          grep -q 'becklink_flutter' \
+          grep -q 'becklinks_flutter' \
             ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift
 
       # An iPhone on the newest iOS runtime; device names differ between images and Xcode versions.

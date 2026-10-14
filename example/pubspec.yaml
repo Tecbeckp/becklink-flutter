@@ -1,12 +1,12 @@
-name: becklink_flutter_example
-description: Demonstrates how to use the becklink_flutter plugin.
+name: becklinks_flutter_example
+description: Demonstrates how to use the becklinks_flutter plugin.
 publish_to: none
 
 environment:
   sdk: ^3.12.0
 
 dependencies:
-  becklink_flutter:
+  becklinks_flutter:
     # The example always builds against the plugin source next to it.
     path: ../
   flutter:
