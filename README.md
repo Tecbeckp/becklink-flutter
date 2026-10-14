@@ -188,7 +188,7 @@ time (Flutter turns it on by default from 3.27). In `ios/Runner/Info.plist`:
 ```
 
 **Custom URL scheme (optional).** If you set a custom URI scheme for your iOS app in the dashboard,
-the "Open in app" button of Beck Links's page for in-app browsers uses it
+the "Open in app" button of Beck Links' page for in-app browsers uses it
 (`acmeshop://becklink?url=…`). Register the same scheme in `Info.plist`:
 
 ```xml
@@ -214,7 +214,7 @@ await BeckLink.instance.configure(apiKey: 'pk_live_YOUR_KEY', enablePasteboard: 
 
 What the user sees:
 
-1. They tap a link without the app installed. Beck Links's landing page shows a **Get the app**
+1. They tap a link without the app installed. Beck Links' landing page shows a **Get the app**
    button; tapping it copies a click URL (`https://acme.becklinks.com/_c/{click ID}`) and opens the
    App Store.
 2. They install and open the app. On that first run only, and only when iOS reports that the
@@ -671,7 +671,7 @@ dashboard's domain diagnostics and Link Tester check the hosted files for you.
 | iOS build fails with Swift Package Manager: `The package product 'becklinks-flutter' requires minimum platform version 15.0 for the iOS platform, but this target supports 13.0`                           | The Runner target's deployment target is below 15.0                                                                                 | Set **Minimum Deployments** iOS 15.0 on the Runner target, then run `flutter build ios --config-only`                                                        |
 | iOS: the link opens Safari or the App Store, not the app                                                                                                                                                  | Wrong Apple Team ID or bundle ID in the dashboard, or the Associated Domains entitlement is missing from this build                 | Fix the iOS app settings in the dashboard; check the entitlement in Release builds and the capability of your App ID                                         |
 | iOS: a link typed or pasted into Safari's address bar opens the website                                                                                                                                   | By design: iOS opens apps only for tapped links                                                                                     | Tap the link in Notes or Messages instead                                                                                                                    |
-| iOS: tapping a link on a web page of the same host opens the website                                                                                                                                      | By design: iOS ignores Universal Links within the same domain                                                                       | Link from another domain; Beck Links's landing page offers an "Open in app" button                                                                            |
+| iOS: tapping a link on a web page of the same host opens the website                                                                                                                                      | By design: iOS ignores Universal Links within the same domain                                                                       | Link from another domain; Beck Links' landing page offers an "Open in app" button                                                                            |
 | iOS: links stopped opening the app on one device                                                                                                                                                          | The user once chose to open such a link in Safari, which iOS remembers                                                              | Long-press the link and choose to open it in the app, or tap **Open** in Safari's app banner                                                                 |
 | iOS: a changed app setting has no effect yet                                                                                                                                                              | Apple's CDN still serves the old `apple-app-site-association`                                                                       | Wait (it can take hours); compare with `curl https://app-site-association.cdn-apple.com/a/v1/acme.becklinks.com`; use `?mode=developer` in development builds |
 | Android: the link opens the browser (Android 12+) or a chooser (Android 6–11)                                                                                                                             | `assetlinks.json` lacks the SHA-256 of the installed build, often because only the upload key is registered                         | Add the Play App Signing (and debug) SHA-256 in the dashboard, reinstall, run `adb shell pm verify-app-links --re-verify com.acme.shop`                      |

@@ -144,6 +144,6 @@ answer for your other SDKs.
 ## Data retention
 
 - **On the device:** see [What the SDK stores on the device](#what-the-sdk-stores-on-the-device).
-- **On Beck Links's servers:** SDK sessions, clicks and events are kept for your plan's data
+- **On Beck Links' servers:** SDK sessions, clicks and events are kept for your plan's data
   retention period and then deleted; aggregated reports may be kept longer. Your plan's details list
   its retention period. Raw IP addresses and the raw install referrer are never stored.
