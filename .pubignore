@@ -1,2 +1,39 @@
-# The one-file re-export package of the old name is published by hand from legacy/becklink_flutter.
+# A .pubignore replaces .gitignore for pub, so everything .gitignore lists is repeated below.
+# legacy/ is the old-name wrapper package, published by hand from its own folder.
 legacy/
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+# Kotlin 2.x Gradle daemon session data
+.kotlin/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.flutter-plugins-dependencies
+/build/
+/coverage/
