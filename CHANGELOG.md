@@ -4,6 +4,14 @@ All notable changes to `becklinks_flutter` (called `becklink_flutter` up to 0.2.
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/).
 
+## 0.3.2 (2026-10-17)
+
+### Changed
+
+- Documentation and package metadata only, to make the package easier to find: a description that
+  names deep linking, deferred deep linking and install attribution, pub.dev topics, a link to the
+  documentation, a README with a "Why Beck Links" section and an FAQ. No code change.
+
 ## 0.3.1 (2026-10-14)
 
 ### Changed

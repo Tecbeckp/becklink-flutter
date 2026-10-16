@@ -1,6 +1,6 @@
 name: becklinks_flutter
 description: Deep links, deferred deep linking and install attribution for Flutter on Android and iOS. A Firebase Dynamic Links alternative by Beck Links.
-version: 0.3.1
+version: 0.3.2
 homepage: https://becklinks.com
 documentation: https://docs.becklinks.com/flutter-sdk
 repository: https://github.com/Tecbeckp/becklinks-flutter

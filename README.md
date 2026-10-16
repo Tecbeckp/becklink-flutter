@@ -55,7 +55,7 @@ Add the package from [pub.dev](https://pub.dev/packages/becklinks_flutter):
 flutter pub add becklinks_flutter
 ```
 
-This adds `becklinks_flutter: ^0.3.1` to your `pubspec.yaml`. To try an unreleased change, depend on
+This adds `becklinks_flutter: ^0.3.2` to your `pubspec.yaml`. To try an unreleased change, depend on
 the repository instead:
 
 ```yaml
