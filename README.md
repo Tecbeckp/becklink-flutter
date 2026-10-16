@@ -1,7 +1,9 @@
-# becklinks_flutter
+# becklinks_flutter: deep linking, deferred deep linking and install attribution for Flutter
 
-Deep links, deferred deep links and install attribution for Flutter apps on Android and iOS, with
-[Beck Links](https://becklinks.com).
+A Flutter deep link SDK for Android and iOS, by [Beck Links](https://becklinks.com). It opens the
+right screen from a link (Android App Links and iOS Universal Links), keeps the destination through
+an app install (deferred deep linking), and tells you which link brought an install. It is an
+alternative to the shut-down Firebase Dynamic Links, with links on your own project host.
 
 - **Direct deep links:** Universal Links (iOS) and App Links (Android) on your project's
   `becklinks.com` host open the right screen, on cold and warm start.
@@ -10,9 +12,29 @@ Deep links, deferred deep links and install attribution for Flutter apps on Andr
   Every match says how it was made (`matchMethod`) and how sure it is (`confidence`).
 - **Attribution and events:** which link brought an install, plus custom events (purchases,
   sign-ups) with an offline queue, shown in the Beck Links dashboard.
-- **Share links:** create referral and share links from the app.
+- **Links for every item:** one URL pattern such as `/c/{id}` gives every product, profile or post a
+  link, with its own preview in chat apps (see [URL templates](#links-to-every-item-url-templates)).
+- **Referral links:** create share and referral links from the app, with the referrer's user ID and
+  a campaign attached (see [Share links](#share-links)).
 - **Privacy first:** no IDFA, no GAID, no device fingerprinting, no tracking prompt. See
   [Privacy](#privacy).
+
+## Why Beck Links
+
+- **Honest data.** Every deferred match reports its method and confidence; when a match is not
+  possible (for example an iOS user who denies the paste), the install is reported as `organic`
+  instead of being guessed.
+- **No fingerprinting.** Nothing identifies a device by its IP address or hardware, so there is no
+  tracking prompt.
+- **Setup that is checked for you.** Beck Links hosts `assetlinks.json` and
+  `apple-app-site-association` and has a Link Tester and domain diagnostics for the usual mistakes.
+- **Works with your router.** The SDK hands you a path and parameters; you pass them to go_router,
+  Navigator or your own code.
+- **Free during early access.** See [becklinks.com](https://becklinks.com) for the planned plans.
+
+Coming from Firebase Dynamic Links? Read
+[Migrating from Firebase Dynamic Links](https://docs.becklinks.com/migrating-from-firebase) and
+[A Firebase Dynamic Links alternative for Flutter and the web](https://becklinks.com/firebase-dynamic-links-alternative).
 
 ## Requirements
 
@@ -697,6 +719,32 @@ redirect:
 curl -i https://acme.becklinks.com/.well-known/apple-app-site-association
 curl -i https://acme.becklinks.com/.well-known/assetlinks.json
 ```
+
+## FAQ
+
+**What is deferred deep linking in Flutter?** A link that remembers its destination across an app
+install: the user taps it, installs the app, opens it, and lands on the linked screen instead of the
+home screen. See [Deferred deep linking](#deferred-deep-linking).
+
+**Is this a replacement for Firebase Dynamic Links?** It does the same jobs (open the app on the right
+screen, survive an install, count clicks and installs) on a host of your project, and Firebase
+Dynamic Links no longer works. Old `page.link` addresses cannot be revived, so links must be
+recreated; see the migration guide above.
+
+**Does deferred deep linking work on iOS?** Yes when the user allows a paste (the opt-in pasteboard
+method); otherwise the install is reported as `organic`. There is no fingerprinting fallback, by
+design. Android is exact through the Play Install Referrer.
+
+**Does it need an advertising ID or a tracking prompt?** No. See [Privacy](#privacy).
+
+**Can I create referral links from the app?** Yes: `createLink()` with a campaign, and the user ID
+is added as `referrer_user_id` when one is set. See [Share links](#share-links).
+
+**Which router should I use?** Any. `onLink` gives a path and parameters; see
+[Handling links](#handling-links) for go_router, Navigator and apps that already use app_links.
+
+**Does it work on Flutter web or desktop?** No, Android and iOS only. For websites there are the
+[web SDKs](https://docs.becklinks.com/web-sdk) (JavaScript, React, Next.js, Vue).
 
 ## Known limitations
 
